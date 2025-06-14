@@ -102,7 +102,7 @@ export default function MembersPage() {
       
       await fetchMembers();
       closeModals();
-    } catch (error) {
+    } catch {
       setError('Failed to save member');
     } finally {
       setFormLoading(false);
@@ -117,7 +117,7 @@ export default function MembersPage() {
       await membersAPI.delete(deletingMember._id);
       await fetchMembers();
       closeModals();
-    } catch (error) {
+    } catch {
       setError('Failed to delete member');
     } finally {
       setFormLoading(false);

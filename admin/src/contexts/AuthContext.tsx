@@ -5,8 +5,7 @@ import {
   User, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged,
-  AuthError
+  onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -63,8 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
       setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      const authError = error as AuthError;
+    } catch {
       setError('Invalid credentials');
     } finally {
       setLoading(false);
@@ -80,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
       setLoading(true);
       await signOut(auth);
-    } catch (error) {
+    } catch {
       setError('Failed to sign out');
     } finally {
       setLoading(false);

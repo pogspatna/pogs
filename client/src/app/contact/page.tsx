@@ -62,7 +62,7 @@ export default function ContactPage() {
               Get in touch with POGS
             </p>
             <p className="text-body-lg text-blue-50 max-w-3xl mx-auto leading-relaxed">
-              We're here to help and answer any questions you might have. 
+              We&apos;re here to help and answer any questions you might have. 
               We look forward to hearing from you and connecting with our medical community.
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function ContactPage() {
                       <h2 className="text-title text-gray-900">
                         Send us a Message
                       </h2>
-                      <p className="text-caption">We'll respond within 24 hours</p>
+                      <p className="text-caption">We&apos;ll respond within 24 hours</p>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function ContactPage() {
                       <CheckCircle className="text-green-600 w-6 h-6 flex-shrink-0" />
                       <div>
                         <p className="text-green-800 font-semibold">Message sent successfully!</p>
-                        <p className="text-green-700 text-sm mt-1">Thank you for reaching out. We'll get back to you soon.</p>
+                        <p className="text-green-700 text-sm mt-1">Thank you for reaching out. We&apos;ll get back to you soon.</p>
                       </div>
                     </div>
                   )}

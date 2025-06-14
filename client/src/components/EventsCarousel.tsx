@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Calendar, MapPin, Clock, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -28,22 +28,7 @@ const EventsCarousel = ({ limit = 6, showArrows = true }: EventsCarouselProps) =
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  useEffect(() => {
-    if (events.length > 0 && isAutoPlaying) {
-      startAutoPlay();
-    }
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [events, isAutoPlaying]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -74,9 +59,9 @@ const EventsCarousel = ({ limit = 6, showArrows = true }: EventsCarouselProps) =
     } finally {
       setLoading(false);
     }
-  };
+  }, [limit]);
 
-  const startAutoPlay = () => {
+  const startAutoPlay = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -85,7 +70,22 @@ const EventsCarousel = ({ limit = 6, showArrows = true }: EventsCarouselProps) =
         prevIndex === events.length - 1 ? 0 : prevIndex + 1
       );
     }, 4000); // Change slide every 4 seconds
-  };
+  }, [events.length]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
+  useEffect(() => {
+    if (events.length > 0 && isAutoPlaying) {
+      startAutoPlay();
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [events, isAutoPlaying, startAutoPlay]);
 
   const stopAutoPlay = () => {
     if (intervalRef.current) {
@@ -190,7 +190,7 @@ const EventsCarousel = ({ limit = 6, showArrows = true }: EventsCarouselProps) =
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {events.map((event, index) => {
+            {events.map((event) => {
               const eventDate = formatDate(event.date);
               return (
                 <div key={event._id} className="w-full flex-shrink-0">

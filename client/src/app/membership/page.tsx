@@ -162,7 +162,7 @@ const MembershipPage = () => {
             </div>
             <h1 className="text-hero mb-6">Membership Application</h1>
             <p className="text-subtitle text-blue-100 max-w-3xl mx-auto">
-              Join POGS and be part of our distinguished medical community committed to excellence in women's healthcare
+              Join POGS and be part of our distinguished medical community committed to excellence in women&apos;s healthcare
             </p>
           </div>
         </div>
@@ -179,7 +179,7 @@ const MembershipPage = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'options' | 'online' | 'offline')}
                 className={`flex items-center space-x-2 py-4 px-6 border-b-4 font-semibold text-sm transition-all duration-200 whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600 bg-blue-50'

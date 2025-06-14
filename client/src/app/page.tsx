@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Users, Calendar, FileText, UserCheck, MapPin, Award, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe, Clock } from 'lucide-react';
 import EventsCarousel from '@/components/EventsCarousel';
 
@@ -76,16 +77,16 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center space-x-1 md:space-x-2 bg-white/15 backdrop-blur-sm px-3 py-1 md:px-4 md:py-2 rounded-full border border-white/20">
                     <Globe className="w-3 h-3 md:w-4 md:h-4 text-blue-300" />
-                    <span className="text-white text-xs md:text-sm font-medium">Bihar's Premier</span>
+                    <span className="text-white text-xs md:text-sm font-medium">Bihar&apos;s Premier</span>
                   </div>
                 </div>
 
                 <p className="text-lg md:text-xl lg:text-2xl text-blue-100 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Advancing Excellence in Women's Healthcare Through Professional Collaboration & Continuous Learning
+                  Advancing Excellence in Women&apos;s Healthcare Through Professional Collaboration &amp; Continuous Learning
                 </p>
 
                 <p className="text-base md:text-lg text-blue-50 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Join Bihar's leading medical society dedicated to promoting the highest standards 
+                  Join Bihar&apos;s leading medical society dedicated to promoting the highest standards 
                   of obstetrics and gynaecology practice, proudly affiliated with FOGSI.
                 </p>
               </div>
@@ -140,7 +141,7 @@ export default function HomePage() {
                     <span>Founded 1958</span>
                   </div>
                   <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-2">Our Visionary Founders</h3>
-                  <p className="text-emerald-100 text-xs md:text-sm">Pioneers of Women's Healthcare in Bihar</p>
+                  <p className="text-emerald-100 text-xs md:text-sm">Pioneers of Women&apos;s Healthcare in Bihar</p>
                 </div>
                 
                 <div className="space-y-3 md:space-y-4">
@@ -149,10 +150,11 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3 md:space-x-4">
                       <div className="relative flex-shrink-0">
                         <div className="w-12 h-14 md:w-16 md:h-20 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-xl overflow-hidden border-2 border-emerald-200/30">
-                          <img 
+                          <Image 
                             src="/mp_john.png" 
                             alt="Dr. M.P. John" 
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                         </div>
                         <div className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center">
@@ -162,7 +164,7 @@ export default function HomePage() {
                       <div className="flex-1 min-w-0">
                         <h4 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">Dr. M.P. John</h4>
                         <p className="text-emerald-100 text-xs md:text-sm leading-relaxed">
-                          The first lady Obstetrician & Gynecologist of Bihar, founding president of POGS
+                          The first lady Obstetrician &amp; Gynecologist of Bihar, founding president of POGS
                         </p>
                         <div className="flex items-center space-x-1 mt-1 md:mt-2">
                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-400 rounded-full"></div>
@@ -177,10 +179,11 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3 md:space-x-4">
                       <div className="relative flex-shrink-0">
                         <div className="w-12 h-14 md:w-16 md:h-20 bg-gradient-to-br from-teal-400/20 to-cyan-400/20 rounded-xl overflow-hidden border-2 border-teal-200/30">
-                          <img 
+                          <Image 
                             src="/sn_upadhyay.png" 
                             alt="Dr. S.N. Upadhyay" 
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                         </div>
                         <div className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full flex items-center justify-center">
@@ -400,8 +403,8 @@ export default function HomePage() {
               
               <div className="space-y-6">
                 <p className="text-xl text-gray-600 leading-relaxed">
-                  The Patna Obstetrics & Gynaecological Society (POGS) has been at the forefront 
-                  of advancing women's healthcare in Bihar. Our society brings together dedicated 
+                  The Patna Obstetrics &amp; Gynaecological Society (POGS) has been at the forefront 
+                  of advancing women&apos;s healthcare in Bihar. Our society brings together dedicated 
                   medical professionals committed to excellence in obstetrics and gynaecology.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
@@ -434,7 +437,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 text-xl mb-1">Expert Members</h4>
-                    <p className="text-gray-600">Leading O&G professionals in Bihar</p>
+                    <p className="text-gray-600">Leading O&amp;G professionals in Bihar</p>
                     <div className="flex items-center space-x-1 mt-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       <span className="text-blue-600 text-sm">500+ Active Members</span>
@@ -506,8 +509,8 @@ export default function HomePage() {
             </h2>
             
             <p className="text-xl text-blue-100 mb-12 leading-relaxed max-w-4xl mx-auto">
-              Become part of Bihar's leading obstetrics and gynaecology society. Connect with experts, 
-              advance your career, and contribute to excellence in women's healthcare.
+              Become part of Bihar&apos;s leading obstetrics and gynaecology society. Connect with experts, 
+              advance your career, and contribute to excellence in women&apos;s healthcare.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">

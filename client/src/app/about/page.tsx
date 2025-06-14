@@ -14,7 +14,7 @@ export default function AboutPage() {
               Patna Obstetrics & Gynaecological Society
             </p>
             <p className="text-lg text-blue-50 max-w-3xl mx-auto">
-              Dedicated to advancing excellence in women's healthcare through professional development, 
+              Dedicated to advancing excellence in women&apos;s healthcare through professional development, 
               research, and community service in Bihar since our inception.
             </p>
           </div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
               <p className="text-gray-700 leading-relaxed">
                 To promote and advance the science and practice of obstetrics and gynaecology 
                 in Bihar through education, research, and professional development. We strive 
-                to improve women's healthcare outcomes by fostering excellence among medical 
+                to improve women&apos;s healthcare outcomes by fostering excellence among medical 
                 professionals and advocating for evidence-based practices in maternal and 
                 reproductive health.
               </p>
@@ -143,7 +143,7 @@ export default function AboutPage() {
                   A total sum of Rs. Five lacs five thousand nine hundred forty nine & paise ninety only (Rs. 5,05,949.90) was handed over to POGS by organising committee of 33rd All India Conference of FOGSI held at Patna in 1989, organised by Dr. Jagdishwari Mishra for construction of building – POGS office. The amount was part of the savings of 33rd AICOG.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
-                  It gives immense pleasure to document the greatest achievement of society which is worth recording in golden letters in the history of P.O.G.S. — the very fact that the present space of POGS which is named as "Obstetric & Gynaecological Wing" is because of the 33rd All India Congress of FOGSI held at Patna. Thus the long cherished desire to have our own office got fulfilled by the savings of 33rd AICOG.
+                  It gives immense pleasure to document the greatest achievement of society which is worth recording in golden letters in the history of P.O.G.S. — the very fact that the present space of POGS which is named as &quot;Obstetric &amp; Gynaecological Wing&quot; is because of the 33rd All India Congress of FOGSI held at Patna. Thus the long cherished desire to have our own office got fulfilled by the savings of 33rd AICOG.
                 </p>
               </div>
 
@@ -159,7 +159,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  Finally on 6th Oct. 1996 during the Presidentship of Dr. Shanti Roy and Secretaryship of Dr. Pramila Modi, the newly constructed "Obstetric & Gynaecological Wing" was inaugurated by His Excellency Dr. A. R. Kidwai, the then Governor of Bihar.
+                  Finally on 6th Oct. 1996 during the Presidentship of Dr. Shanti Roy and Secretaryship of Dr. Pramila Modi, the newly constructed &quot;Obstetric &amp; Gynaecological Wing&quot; was inaugurated by His Excellency Dr. A. R. Kidwai, the then Governor of Bihar.
                 </p>
               </div>
 
@@ -175,7 +175,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  The "Obstetric and Gynaecological wing" has a seminar hall which can accommodate 75 persons, one president suite, office space, 2 rest rooms, 1 pantry and a small balcony. The balcony was covered from all sides and was converted into a small library room of the society.
+                  The &quot;Obstetric and Gynaecological wing&quot; has a seminar hall which can accommodate 75 persons, one president suite, office space, 2 rest rooms, 1 pantry and a small balcony. The balcony was covered from all sides and was converted into a small library room of the society.
                 </p>
               </div>
             </div>

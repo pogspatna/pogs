@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock, ChevronRight, Filter, X, Search } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Calendar, MapPin, ChevronRight, Filter, X, Search } from 'lucide-react';
 
 interface Event {
   _id: string;
@@ -23,14 +23,6 @@ const EventsPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const statusOptions = ['All', 'Upcoming', 'Ongoing', 'Past'];
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  useEffect(() => {
-    filterEvents();
-  }, [events, selectedStatus, searchTerm]);
 
   const fetchEvents = async () => {
     try {
@@ -65,7 +57,7 @@ const EventsPage = () => {
     }
   };
 
-  const filterEvents = () => {
+  const filterEvents = useCallback(() => {
     let filtered = events;
     
     // Filter by status
@@ -83,7 +75,15 @@ const EventsPage = () => {
     }
     
     setFilteredEvents(filtered);
-  };
+  }, [events, selectedStatus, searchTerm]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    filterEvents();
+  }, [filterEvents]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -365,7 +365,7 @@ const EventsPage = () => {
           {filteredEvents.length > 0 && (
             <div className="mt-20 text-center">
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-white">
-                <h3 className="text-subtitle mb-4">Don't Miss Our Events</h3>
+                <h3 className="text-subtitle mb-4">Don&apos;t Miss Our Events</h3>
                 <p className="text-body-lg text-blue-100 max-w-2xl mx-auto mb-8">
                   Join our medical community and stay updated with the latest events, workshops, and conferences.
                 </p>

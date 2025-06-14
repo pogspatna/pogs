@@ -55,7 +55,7 @@ export default function OfficeBearersPage() {
     return urls[index];
   };
 
-  const handleImageError = (fileId: string, bearerName: string) => {
+  const handleImageError = (fileId: string) => {
     const urls = getGoogleDriveImageUrls(fileId);
     const currentIndex = imageUrlIndex[fileId] || 0;
     
@@ -69,8 +69,7 @@ export default function OfficeBearersPage() {
     }
   };
 
-  const handleImageLoad = (fileId: string, bearerName: string) => {
-    const currentIndex = imageUrlIndex[fileId] || 0;
+  const handleImageLoad = () => {
     // Image loaded successfully
   };
 
@@ -248,10 +247,10 @@ export default function OfficeBearersPage() {
                         alt={bearer.name}
                         className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-100"
                         onError={() => {
-                          handleImageError(bearer.photo, bearer.name);
+                          handleImageError(bearer.photo);
                         }}
                         onLoad={() => {
-                          handleImageLoad(bearer.photo, bearer.name);
+                          handleImageLoad();
                         }}
                       />
                     </div>
@@ -351,11 +350,11 @@ export default function OfficeBearersPage() {
                           alt="Current"
                           className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                           onError={() => {
-                            handleImageError(editingBearer.photo, editingBearer.name);
+                            handleImageError(editingBearer.photo);
                           }}
-                          onLoad={() => {
-                            handleImageLoad(editingBearer.photo, editingBearer.name);
-                          }}
+                                                      onLoad={() => {
+                              handleImageLoad();
+                            }}
                         />
                       ) : (
                         <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-200">

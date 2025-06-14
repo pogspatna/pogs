@@ -37,7 +37,7 @@ const Footer = () => {
             <p className="text-gray-300 text-body leading-relaxed mb-6">
               Advancing the field of obstetrics and gynaecology through education, research, and 
               professional development in Bihar. A proud member of FOGSI, committed to excellence 
-              in women's healthcare.
+              in women&apos;s healthcare.
             </p>
             <div className="flex items-center space-x-4">
               <Link 
@@ -147,7 +147,7 @@ const Footer = () => {
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {currentYear} Patna Obstetrics & Gynaecological Society. All rights reserved.
+              © {currentYear} Patna Obstetrics &amp; Gynaecological Society. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link 

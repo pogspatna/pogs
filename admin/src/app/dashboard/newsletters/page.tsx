@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FileText, Plus, Edit, Trash2, Download, Upload, Search } from 'lucide-react';
+import { FileText, Plus, Edit, Trash2, Download, Search } from 'lucide-react';
 import { apiService } from '@/lib/api';
 
 interface Newsletter {

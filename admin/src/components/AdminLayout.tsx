@@ -29,7 +29,7 @@ interface AdminLayoutProps {
 interface NavigationItem {
   name: string;
   href: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   children?: NavigationItem[];
 }
 
@@ -78,7 +78,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const isActive = pathname === item.href;
     const isExpanded = expandedItems.includes(item.name);
     const hasChildren = item.children && item.children.length > 0;
-    const isParentActive = hasChildren && item.children.some(child => pathname === child.href);
+    const isParentActive = hasChildren && item.children?.some(child => pathname === child.href);
 
     return (
       <div key={item.name}>
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         
         {hasChildren && isExpanded && (
           <div className="ml-4">
-            {item.children.map(child => renderNavigationItem(child, level + 1))}
+            {item.children?.map(child => renderNavigationItem(child, level + 1))}
           </div>
         )}
       </div>

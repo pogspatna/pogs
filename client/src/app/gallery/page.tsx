@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Calendar, Image as ImageIcon, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface Gallery {
@@ -140,10 +141,11 @@ export default function GalleryPage() {
                           onClick={() => setSelectedImage(image)}
                         >
                           <div className="relative overflow-hidden rounded-lg bg-gray-200 aspect-square">
-                            <img
+                            <Image
                               src={getImageUrl(image.imageUrl)}
                               alt="Gallery image"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.src = `https://drive.google.com/thumbnail?id=${image.imageUrl}&sz=w400`;
@@ -184,9 +186,11 @@ export default function GalleryPage() {
             >
               ✕
             </button>
-            <img
+            <Image
               src={getImageUrl(selectedImage.imageUrl)}
               alt="Gallery image"
+              width={800}
+              height={600}
               className="w-full max-h-[90vh] object-contain rounded-lg"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;

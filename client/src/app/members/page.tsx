@@ -169,7 +169,7 @@ export default function MembersPage() {
             Want to Join Our Community?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Become part of Bihar's leading obstetrics and gynaecology society
+            Become part of Bihar&apos;s leading obstetrics and gynaecology society
           </p>
           <a href="/membership" className="btn-secondary">
             Apply for Membership

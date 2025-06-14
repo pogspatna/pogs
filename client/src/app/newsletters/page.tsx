@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FileText, Download, Calendar, Search, ChevronDown, ChevronUp, Filter } from 'lucide-react';
 
 interface Newsletter {
@@ -19,15 +19,7 @@ const NewslettersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchNewsletters();
-  }, []);
-
-  useEffect(() => {
-    filterNewsletters();
-  }, [newsletters, searchTerm, selectedYear, sortOrder]);
-
-  const fetchNewsletters = async () => {
+  const fetchNewsletters = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -58,9 +50,9 @@ const NewslettersPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filterNewsletters = () => {
+  const filterNewsletters = useCallback(() => {
     let filtered = newsletters;
 
     // Filter by search term
@@ -86,7 +78,15 @@ const NewslettersPage = () => {
     });
 
     setFilteredNewsletters(filtered);
-  };
+  }, [newsletters, searchTerm, selectedYear, sortOrder]);
+
+  useEffect(() => {
+    fetchNewsletters();
+  }, [fetchNewsletters]);
+
+  useEffect(() => {
+    filterNewsletters();
+  }, [filterNewsletters]);
 
   const getUniqueYears = () => {
     const years = newsletters.map(newsletter => 

@@ -147,7 +147,7 @@ const OfficeBearersPage = () => {
             </div>
             <h1 className="text-hero mb-6">Office Bearers</h1>
             <p className="text-subtitle text-blue-100 max-w-3xl mx-auto">
-              Meet the distinguished medical professionals who lead POGS with dedication, expertise, and unwavering commitment to women's healthcare
+              Meet the distinguished medical professionals who lead POGS with dedication, expertise, and unwavering commitment to women&apos;s healthcare
             </p>
           </div>
         </div>
@@ -401,7 +401,7 @@ const OfficeBearersPage = () => {
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-white">
               <h3 className="text-subtitle mb-4">Join Our Leadership</h3>
               <p className="text-body-lg text-blue-100 max-w-2xl mx-auto mb-8">
-                Interested in contributing to POGS leadership? Learn about opportunities to serve our medical community and advance women's healthcare.
+                Interested in contributing to POGS leadership? Learn about opportunities to serve our medical community and advance women&apos;s healthcare.
               </p>
               <button
                 onClick={() => window.location.href = '/contact'}

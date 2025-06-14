@@ -40,7 +40,7 @@ try {
 } catch (error) {
   // Log error for debugging but don't expose details
   if (process.env.NODE_ENV !== 'production') {
-    console.error('Error loading routes:', error.message);
+  console.error('Error loading routes:', error.message);
   }
 }
 
@@ -48,7 +48,7 @@ try {
 app.use((err, req, res, next) => {
   // Log full error in development only
   if (process.env.NODE_ENV !== 'production') {
-    console.error(err.stack);
+  console.error(err.stack);
   }
   res.status(500).json({ error: 'Internal server error' });
 });
@@ -63,17 +63,17 @@ const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/pogs_db';
 mongoose.connect(mongoUri)
   .then(() => {
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB');
     }
     app.listen(PORT, () => {
       if (process.env.NODE_ENV !== 'production') {
-        console.log(`Server is running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
       }
     });
   })
   .catch((error) => {
     // Log error for debugging but don't expose details
     if (process.env.NODE_ENV !== 'production') {
-      console.error('Database connection error:', error);
+    console.error('Database connection error:', error);
     }
   }); 

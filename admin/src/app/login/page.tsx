@@ -81,7 +81,7 @@ export default function LoginPage() {
                   Email Address
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
                     <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
                   </div>
                   <input
@@ -89,7 +89,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="admin-form-input pl-12 h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-xl"
+                    className="w-full pl-11 pr-4 py-3 h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-xl bg-white"
                     placeholder="admin@example.com"
                     required
                     disabled={isLoading || showConfigError}
@@ -103,7 +103,7 @@ export default function LoginPage() {
                   Password
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
                     <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
                   </div>
                   <input
@@ -111,14 +111,14 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="admin-form-input pl-12 pr-12 h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-xl"
+                    className="w-full pl-11 pr-12 py-3 h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 rounded-xl bg-white"
                     placeholder="Enter your password"
                     required
                     disabled={isLoading || showConfigError}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-50 rounded-r-xl transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center hover:bg-gray-50 rounded-r-xl transition-colors z-10"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading || showConfigError}
                   >

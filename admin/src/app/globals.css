@@ -1,0 +1,298 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1e40af;
+  --color-primary-dark: #1e3a8a;
+  --color-primary-light: #3b82f6;
+  --color-secondary: #0ea5e9;
+  --color-accent: #10b981;
+  --color-admin: #374151;
+  --color-admin-dark: #1f2937;
+  --color-admin-light: #6b7280;
+  --color-background: #ffffff;
+  --color-foreground: #1f2937;
+  --color-muted: #f8fafc;
+  --color-border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Admin-specific button styles */
+.btn-admin-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.btn-admin-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+}
+
+.btn-admin-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+}
+
+.btn-admin-success {
+  @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2;
+}
+
+.btn-admin-sm {
+  @apply py-1 px-3 text-sm;
+}
+
+/* Admin card styles */
+.admin-card {
+  @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.admin-card-header {
+  @apply p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg;
+}
+
+.admin-card-content {
+  @apply p-4;
+}
+
+.admin-card-footer {
+  @apply p-4 border-t border-gray-200 bg-gray-50 rounded-b-lg;
+}
+
+/* Admin form styles */
+.admin-form-group {
+  @apply space-y-2 mb-4;
+}
+
+.admin-form-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+.admin-form-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-sm;
+}
+
+.admin-form-textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-sm resize-none min-h-[100px];
+}
+
+.admin-form-select {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-sm appearance-none bg-white;
+}
+
+.admin-form-error {
+  @apply text-sm text-red-600 mt-1;
+}
+
+/* Admin table styles */
+.admin-table-container {
+  @apply overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm;
+}
+
+.admin-table {
+  @apply min-w-full divide-y divide-gray-200;
+}
+
+.admin-table-header {
+  @apply bg-gray-50;
+}
+
+.admin-table-header th {
+  @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+}
+
+.admin-table-body {
+  @apply bg-white divide-y divide-gray-200;
+}
+
+.admin-table-body td {
+  @apply px-4 py-3 whitespace-nowrap text-sm text-gray-900;
+}
+
+.admin-table-row {
+  @apply hover:bg-gray-50 transition-colors duration-150;
+}
+
+/* Admin sidebar styles */
+.admin-sidebar {
+  @apply bg-white border-r border-gray-200 shadow-sm;
+}
+
+.admin-sidebar-nav {
+  @apply space-y-1 p-4;
+}
+
+.admin-sidebar-item {
+  @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200;
+}
+
+.admin-sidebar-item-active {
+  @apply bg-blue-100 text-blue-700 border-r-2 border-blue-600;
+}
+
+.admin-sidebar-item-inactive {
+  @apply text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+}
+
+/* Admin header styles */
+.admin-header {
+  @apply bg-white border-b border-gray-200 shadow-sm;
+}
+
+.admin-header-content {
+  @apply flex items-center justify-between px-6 py-4;
+}
+
+/* Admin status badges */
+.admin-status-active {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800;
+}
+
+.admin-status-inactive {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800;
+}
+
+.admin-status-pending {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800;
+}
+
+.admin-status-approved {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800;
+}
+
+.admin-status-rejected {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800;
+}
+
+/* Admin loading styles */
+.admin-loading-spinner {
+  @apply animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600;
+}
+
+.admin-loading-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+/* Admin modal styles */
+.admin-modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+}
+
+.admin-modal-content {
+  @apply bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto;
+}
+
+.admin-modal-header {
+  @apply p-4 border-b border-gray-200;
+}
+
+.admin-modal-body {
+  @apply p-4;
+}
+
+.admin-modal-footer {
+  @apply p-4 border-t border-gray-200 bg-gray-50 rounded-b-lg;
+}
+
+/* Admin utility classes */
+.admin-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.admin-section {
+  @apply py-6;
+}
+
+.admin-page-header {
+  @apply mb-6;
+}
+
+.admin-page-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.admin-page-subtitle {
+  @apply text-gray-600;
+}
+
+/* Responsive utilities for admin */
+.admin-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.admin-grid-2 {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+}
+
+.admin-flex-between {
+  @apply flex items-center justify-between;
+}
+
+.admin-flex-center {
+  @apply flex items-center justify-center;
+}
+
+/* Admin dashboard specific styles */
+.admin-stat-card {
+  @apply bg-white p-6 rounded-lg border border-gray-200 shadow-sm;
+}
+
+.admin-stat-number {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.admin-stat-label {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.admin-stat-change {
+  @apply text-sm font-medium mt-2;
+}
+
+.admin-stat-change-positive {
+  @apply text-green-600;
+}
+
+.admin-stat-change-negative {
+  @apply text-red-600;
+}
+
+/* Custom animations */
+@keyframes fade-in {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes shake {
+  0%, 100% { 
+    transform: translateX(0); 
+  }
+  25% { 
+    transform: translateX(-5px); 
+  }
+  75% { 
+    transform: translateX(5px); 
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}

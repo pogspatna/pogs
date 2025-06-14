@@ -1,0 +1,341 @@
+# Product Requirements Document (PRD)
+## Patna Obstetrics & Gynaecological Society (POGS) Website
+
+### 1. Project Overview
+
+**Project Name:** POGS Dynamic Website  
+**Organization:** Patna Obstetrics & Gynaecological Society  
+**Project Type:** Full-stack web application with admin panel  
+**Target Users:** Medical professionals, existing POGS members, prospective members  
+
+### 2. Project Objectives
+
+- Create an official digital platform for POGS
+- Provide seamless access to society information and resources
+- Enable efficient membership management
+- Facilitate event information dissemination
+- Streamline administrative content management
+
+### 3. Technical Architecture
+
+**Repository Structure:**
+```
+pogs-website/
+├── client/          # Public website (Next.js)
+├── admin/           # Admin panel (Next.js)
+└── backend/         # API server (Express.js + Node.js)
+```
+
+**Technology Stack:**
+- **Frontend:** Next.js (React framework)
+- **Backend:** Express.js + Node.js
+- **Database:** MongoDB
+- **Authentication:** Firebase Auth (Admin only)
+- **File Storage:** Google Drive API
+- **Email Service:** Resend
+- **Deployment:** 
+  - Frontend: Vercel (client + admin)
+  - Backend: Render
+- **Maps Integration:** Google Maps API
+
+### 4. User Stories & Requirements
+
+#### 4.1 Public Website Features
+
+##### 4.1.1 Homepage
+- **As a visitor,** I want to see society introduction and key highlights
+- **Requirements:**
+  - Hero section with POGS branding
+  - Society overview and key achievements
+  - Quick navigation to main sections
+  - Latest news/announcements banner
+  - Contact information footer
+
+##### 4.1.2 About Us Section
+- **As a visitor,** I want to learn about POGS history, mission, and vision
+- **Requirements:**
+  - Society history timeline
+  - Mission statement
+  - Vision statement
+  - FOGSI affiliation information
+  - Organizational structure
+
+##### 4.1.3 Office Bearers
+- **As a visitor,** I want to view current office bearers and historical archive
+- **Requirements:**
+  - Current office bearers with photos and designations
+  - Archive of past office bearers by year
+  - Image storage via Google Drive API
+  - Admin-controlled content updates
+
+##### 4.1.4 Member Directory
+- **As a visitor,** I want to search and view member information
+- **Requirements:**
+  - Member cards displaying: Name, Address only
+  - Search functionality by member name
+  - Responsive card layout
+  - Public access (no authentication required)
+  - Data stored in MongoDB
+
+##### 4.1.5 Events Section
+- **As a visitor,** I want to view upcoming, ongoing, and past events
+- **Requirements:**
+  - Event cards with: Event name, short description, date, location
+  - "View Details" button for expanded information
+  - Categorization: Upcoming, Ongoing, Past Events
+  - Admin-controlled event management
+  - Responsive card grid layout
+
+##### 4.1.6 Newsletter Archive
+- **As a visitor,** I want to access past newsletters
+- **Requirements:**
+  - Chronological organization of newsletters
+  - PDF format storage via Google Drive
+  - Download functionality
+  - No search functionality required
+  - Admin upload capability
+
+##### 4.1.7 Contact Us
+- **As a visitor,** I want to contact POGS and find location information
+- **Requirements:**
+  - Contact form with fields: Name, Email, Phone, Message
+  - Form submission via Resend email service
+  - Office address, phone, email display
+  - Embedded Google Maps for office location
+  - Contact information: 
+    - Address: IMA Building, Dr. A. K. N. Sinha Path, South East of Gandhi Maidan, Patna – 800 004 (Bihar)
+    - Phone: 0612-2321542, 7677253032
+    - Email: patnabogs@gmail.com
+
+##### 4.1.8 Membership Application
+- **As a prospective member,** I want to apply for membership online or offline
+- **Requirements:**
+  - Two options: Online Application | Offline Application
+  - **Offline Option:**
+    - Download PDF form (Uploaded by admin from admin's panel and store in google drive)
+    - Manual submission process
+  - **Online Option:**
+    - Digital form with fields from PDF:
+      - Name, Address, District, Pin Code, State
+      - Mobile/Phone, Email ID
+      - Membership Type: Life (₹15,000) | Annual (₹1,500)
+      - Qualification, Date of Birth
+      - Payment screenshot upload
+    - Payment details display:
+      - Account holder name
+      - Account number
+      - IFSC code
+    - Form submission stores in admin panel
+    - PDF generation of application
+    - Google Drive storage for application PDFs and payment screenshots
+    - Admin verification workflow
+    - Email notification upon approval via Resend
+    - Should be editable by admin
+
+#### 4.2 Admin Panel Features
+
+##### 4.2.1 Authentication
+- **As an admin,** I want secure access to the admin panel
+- **Requirements:**
+  - Firebase authentication (email/password)
+  - Admin users added directly in Firebase console
+  - Separate web application from public site
+  - Session management and logout functionality
+
+##### 4.2.2 Dashboard
+- **As an admin,** I want an overview of system status
+- **Requirements:**
+  - Pending membership applications count
+  - Recent member registrations
+  - Upcoming events summary
+  - Quick action buttons
+  - Non-technical user-friendly interface
+
+##### 4.2.3 Member Management
+- **As an admin,** I want to manage member directory
+- **Requirements:**
+  - Add/Edit/Delete members
+  - Member information: Name, Address
+  - Search and filter members
+  - Approve online membership applications
+  - Send approval emails via Resend
+
+##### 4.2.4 Events Management
+- **As an admin,** I want to manage events information
+- **Requirements:**
+  - Create/Edit/Delete events
+  - Event fields: Name, Description, Date, Location, Detailed Information
+  - Event status: Upcoming, Ongoing, 
+
+##### 4.2.5 Office Bearers Management
+- **As an admin,** I want to manage office bearers information
+- **Requirements:**
+  - Add/Edit/Delete office bearers
+  - Photo upload (which will be stored in google drive)
+  - Designation assignment
+  - Archive management by year
+
+##### 4.2.6 Newsletter Management
+- **As an admin,** I want to manage newsletter archive
+- **Requirements:**
+  - Upload PDF newsletters
+  - Google Drive integration for storage
+  - Chronological organization
+  - Delete/Replace newsletters
+  - Publication date management
+
+##### 4.2.7 Membership Applications
+- **As an admin,** I want to review and process membership applications
+- **Requirements:**
+  - View pending applications
+  - Review application details and payment screenshots
+  - Approve/Reject applications
+  - Send notification emails
+  - Store approved applications in google drive (Complete application detail in pdf format)
+  - Add approved members to directory (Name, address, Date joined)
+
+### 5. Technical Specifications
+
+#### 5.1 Database Schema (MongoDB)
+
+```javascript
+// Members Collection
+{
+  _id: ObjectId,
+  name: String,
+  address: String,
+  membershipType: String, // "Life" | "Annual"
+  dateJoined: Date,
+  status: String, // "Active" | "Inactive"
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Events Collection
+{
+  _id: ObjectId,
+  name: String,
+  shortDescription: String,
+  detailedDescription: String,
+  date: Date,
+  location: String,
+  status: String, // "Upcoming" | "Ongoing" | "Past"
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Office Bearers Collection
+{
+  _id: ObjectId,
+  name: String,
+  designation: String,
+  photo: String, // Google Drive file ID
+  year: Number,
+  isCurrent: Boolean,
+  order: Number, // Display order
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Newsletters Collection
+{
+  _id: ObjectId,
+  title: String,
+  pdfUrl: String, // Google Drive file ID
+  publishDate: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Membership Applications Collection
+{
+  _id: ObjectId,
+  name: String,
+  address: String,
+  district: String,
+  pinCode: String,
+  state: String,
+  mobile: String,
+  email: String,
+  membershipType: String, // "Life" | "Annual"
+  qualification: String,
+  dateOfBirth: Date,
+  paymentScreenshot: String, // Google Drive file ID
+  applicationPdf: String, // Google Drive file ID
+  status: String, // "Pending" | "Approved" | "Rejected"
+  submittedAt: Date,
+  processedAt: Date,
+  processedBy: String // Admin email
+}
+
+// Contact Inquiries Collection
+{
+  _id: ObjectId,
+  name: String,
+  email: String,
+  phone: String,
+  message: String,
+  status: String, // "New" | "Responded"
+  createdAt: Date
+}
+```
+
+#### 5.2 Integration Requirements
+
+**Google Drive API:**
+- Store office bearer photos
+- Store newsletter PDFs
+- Store membership application PDFs
+- Store payment screenshots
+- Implement proper folder structure and permissions
+
+**Resend Email Service:**
+- Send membership approval/rejection emails
+- Send contact form submissions to admin email
+- Email templates for different scenarios
+
+**Firebase Authentication:**
+- Admin-only authentication
+
+**Google Maps API:**
+- Embed office location map
+- Display accurate location information
+
+### 6. UI/UX Requirements
+
+#### 6.1 Design Principles
+- **Medical Professional Theme:** Clean, professional, trustworthy design
+- **Color Scheme:** Medical blues, whites, with accent colors
+- **Typography:** Professional, readable fonts
+- **Imagery:** Medical/healthcare related imagery where appropriate
+
+#### 6.2 Responsive Design
+- **Mobile-first approach**
+- **Touch-friendly interfaces**
+- **Fast loading times**
+
+#### 6.3 Admin Panel UX
+- **Non-technical user friendly**
+- **Intuitive navigation**
+- **Clear action buttons**
+- **Confirmation dialogs for destructive actions**
+- **Progress indicators for file uploads**
+- **Error handling with user-friendly messages**
+
+### 7. Performance Requirements
+
+- **Page Load Time:** < 3 seconds on 3G connection
+- **Image Optimization:** WebP format with fallbacks
+- **Code Splitting:** Route-based code splitting
+- **SEO Optimization:** Meta tags, structured data
+- **Caching Strategy:** Static assets caching, API response caching
+
+### 8. Security Requirements
+
+- **Input validation and sanitization**
+- **File upload restrictions** (PDF, JPG, PNG only)
+- **Rate limiting on API endpoints**
+- **CORS configuration**
+- **Environment variables for sensitive data**
+- **Firebase security rules**
+- **Google Drive API security**

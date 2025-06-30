@@ -1,0 +1,27 @@
+# POGS - Patna Obstetrics & Gynaecological Society
+# Official Website
+
+/* TEAM */
+Organization: Patna Obstetrics & Gynaecological Society
+Contact: patnabogs@gmail.com
+Location: Patna, Bihar, India
+
+/* SITE */
+Last update: 2024/01/15
+Language: English / Hindi
+Doctype: HTML5
+IDE: Visual Studio Code
+Technologies: Next.js, TypeScript, Tailwind CSS, MongoDB, Express.js
+
+/* THANKS */
+Federation of Obstetric and Gynaecological Societies of India (FOGSI)
+All POGS members and contributors
+Medical professionals advancing women's healthcare in Bihar
+
+                                    .-.
+                                   /   \
+                                  |  o  |
+                                   \   /
+                                    '-'
+                        
+                    Made with ❤️ for healthcare professionals 

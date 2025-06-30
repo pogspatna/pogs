@@ -1,0 +1,5 @@
+Contact: mailto:patnabogs@gmail.com
+Contact: tel:+91-612-2321542
+Expires: 2025-12-31T23:59:59.000Z
+Preferred-Languages: en, hi
+Canonical: https://pogspatna.org/.well-known/security.txt

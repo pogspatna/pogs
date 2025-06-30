@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Stethoscope } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +36,15 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-12 h-12 bg-gradient-medical rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200">
-              <Stethoscope className="text-white w-7 h-7" />
+            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200 bg-white">
+              <Image
+                src="/icon.png"
+                alt="POGS Logo"
+                width={48}
+                height={48}
+                className="w-full h-full object-contain"
+                priority
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">POGS</h1>

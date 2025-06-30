@@ -35,7 +35,8 @@ export default function MembersPage() {
 
   const fetchMembers = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/members`);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${apiUrl}/members`);
       if (response.ok) {
         const data = await response.json();
         setMembers(Array.isArray(data) ? data : []);

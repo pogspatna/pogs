@@ -164,6 +164,21 @@ const Footer = () => {
               </Link>
             </div>
           </div>
+          
+          {/* Developer Credit */}
+          <div className="mt-4 pt-4 border-t border-gray-800">
+            <p className="text-gray-500 text-xs text-center">
+              Designed and Developed by{' '}
+              <a 
+                href="https://moviesindiagroup.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium"
+              >
+                MIG Events
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

@@ -123,46 +123,42 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'Image file is required' });
     }
 
-    try {
-      // Generate a unique filename
-      const timestamp = Date.now();
-      const fileName = `gallery-${timestamp}-${req.file.originalname}`;
-      
-      // Upload to Google Drive (gallery folder)
-      const uploadResult = await googleDriveService.uploadFile(
-        req.file.buffer,
-        fileName,
-        req.file.mimetype,
-        'gallery'
-      );
-      
-      console.log('Gallery image uploaded to Google Drive:', uploadResult.id);
-      
-      // Create gallery entry
-      const galleryData = {
-        title: req.body.title || 'Untitled',
-        description: req.body.description || '',
-        imageUrl: uploadResult.id,
-        category: req.body.category || 'General',
-        order: parseInt(req.body.order) || 0
-      };
+    // Generate a unique filename
+    const timestamp = Date.now();
+    const fileName = `gallery-${timestamp}-${req.file.originalname}`;
+    
+    // Upload to Google Drive (gallery folder)
+    const uploadResult = await googleDriveService.uploadFile(
+      req.file.buffer,
+      fileName,
+      req.file.mimetype,
+      'gallery'
+    );
+    
+    console.log('Gallery image uploaded to Google Drive:', uploadResult.id);
+    
+    // Create gallery entry
+    const galleryData = {
+      title: req.body.title || 'Untitled',
+      description: req.body.description || '',
+      imageUrl: uploadResult.id,
+      category: req.body.category || 'General',
+      order: parseInt(req.body.order) || 0
+    };
 
-      const galleryImage = new Gallery(galleryData);
-      await galleryImage.save();
-      
-      res.status(201).json({
-        message: 'Gallery image uploaded successfully',
-        image: galleryImage
-      });
-    } catch (driveError) {
-      console.error('Google Drive upload failed:', driveError.message);
-      return res.status(500).json({ 
-        error: 'Failed to upload image. Please check your file and try again.' 
-      });
-    }
+    const galleryImage = new Gallery(galleryData);
+    await galleryImage.save();
+    
+    res.status(201).json({
+      message: 'Gallery image uploaded successfully',
+      image: galleryImage
+    });
   } catch (error) {
     console.error('Error uploading gallery image:', error);
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ 
+      error: 'Failed to upload image. Please check your file and try again.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -184,25 +180,18 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
     // If new image is uploaded, replace the old one
     if (req.file) {
-      try {
-        const timestamp = Date.now();
-        const fileName = `gallery-${timestamp}-${req.file.originalname}`;
-        
-        const uploadResult = await googleDriveService.uploadFile(
-          req.file.buffer,
-          fileName,
-          req.file.mimetype,
-          'gallery'
-        );
-        
-        updateData.imageUrl = uploadResult.id;
-        console.log('Gallery image updated in Google Drive:', uploadResult.id);
-      } catch (driveError) {
-        console.error('Google Drive upload failed:', driveError.message);
-        return res.status(500).json({ 
-          error: 'Failed to upload new image. Please try again.' 
-        });
-      }
+      const timestamp = Date.now();
+      const fileName = `gallery-${timestamp}-${req.file.originalname}`;
+      
+      const uploadResult = await googleDriveService.uploadFile(
+        req.file.buffer,
+        fileName,
+        req.file.mimetype,
+        'gallery'
+      );
+      
+      updateData.imageUrl = uploadResult.id;
+      console.log('Gallery image updated in Google Drive:', uploadResult.id);
     }
 
     const updatedImage = await Gallery.findByIdAndUpdate(

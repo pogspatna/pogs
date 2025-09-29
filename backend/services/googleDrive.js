@@ -21,21 +21,24 @@ class GoogleDriveService {
 
   async initialize() {
     try {
-      // Check if service account credentials are provided
-      if (!process.env.GOOGLE_DRIVE_CLIENT_EMAIL || 
-          !process.env.GOOGLE_DRIVE_PRIVATE_KEY || 
-          !process.env.GOOGLE_DRIVE_PROJECT_ID) {
+      // Check if OAuth credentials are provided
+      if (!process.env.GOOGLE_DRIVE_CLIENT_ID || 
+          !process.env.GOOGLE_DRIVE_CLIENT_SECRET || 
+          !process.env.GOOGLE_DRIVE_REFRESH_TOKEN) {
+        console.error('Google Drive: Missing OAuth credentials. Please set GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, and GOOGLE_DRIVE_REFRESH_TOKEN');
         return false;
       }
 
-      // Create service account auth
-      this.auth = new google.auth.GoogleAuth({
-        credentials: {
-          client_email: process.env.GOOGLE_DRIVE_CLIENT_EMAIL,
-          private_key: process.env.GOOGLE_DRIVE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-          project_id: process.env.GOOGLE_DRIVE_PROJECT_ID,
-        },
-        scopes: ['https://www.googleapis.com/auth/drive.file'],
+      // Create OAuth2 client
+      this.auth = new google.auth.OAuth2(
+        process.env.GOOGLE_DRIVE_CLIENT_ID,
+        process.env.GOOGLE_DRIVE_CLIENT_SECRET,
+        'urn:ietf:wg:oauth:2.0:oob'
+      );
+
+      // Set refresh token
+      this.auth.setCredentials({
+        refresh_token: process.env.GOOGLE_DRIVE_REFRESH_TOKEN
       });
 
       // Create Drive API instance
@@ -45,8 +48,10 @@ class GoogleDriveService {
       await this.drive.about.get({ fields: 'user' });
       
       this.initialized = true;
+      console.log('Google Drive service initialized successfully with OAuth');
       return true;
     } catch (error) {
+      console.error('Google Drive initialization failed:', error.message);
       return false;
     }
   }
@@ -88,6 +93,9 @@ class GoogleDriveService {
         parents: targetFolderId ? [targetFolderId] : undefined
       };
 
+      // Always use supportsAllDrives when working with shared drives
+      const supportsAllDrives = true;
+
       const media = {
         mimeType: mimeType,
         body: require('stream').Readable.from(fileBuffer)
@@ -96,7 +104,8 @@ class GoogleDriveService {
       const response = await this.drive.files.create({
         resource: fileMetadata,
         media: media,
-        fields: 'id,name,webViewLink,parents'
+        fields: 'id,name,webViewLink,parents',
+        supportsAllDrives: supportsAllDrives
       });
 
       // Make the file publicly viewable
@@ -106,10 +115,12 @@ class GoogleDriveService {
           resource: {
             role: 'reader',
             type: 'anyone'
-          }
+          },
+          supportsAllDrives: supportsAllDrives
         });
       } catch (permissionError) {
         // Continue anyway - file is uploaded but may not be publicly accessible
+        console.log('Permission setting failed (non-critical):', permissionError.message);
       }
       
       return {
@@ -118,7 +129,8 @@ class GoogleDriveService {
         webViewLink: response.data.webViewLink
       };
     } catch (error) {
-      throw new Error('Failed to upload file');
+      console.error('Google Drive upload error:', error.message);
+      throw new Error(`Failed to upload file: ${error.message}`);
     }
   }
 

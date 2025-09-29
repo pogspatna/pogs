@@ -6,9 +6,15 @@ const newsletterSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  pdfUrl: {
+  fileUrl: {
     type: String, // Google Drive file ID
     required: true
+  },
+  fileType: {
+    type: String,
+    required: true,
+    enum: ['pdf', 'image'],
+    default: 'pdf'
   },
   publishDate: {
     type: Date,

@@ -7,7 +7,8 @@ import { apiService } from '@/lib/api';
 interface Newsletter {
   _id: string;
   title: string;
-  pdfUrl: string; // Google Drive file ID
+  fileUrl: string; // Google Drive file ID
+  fileType: 'pdf' | 'image';
   publishDate: string;
   createdAt: string;
   updatedAt: string;
@@ -19,7 +20,7 @@ export default function NewslettersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingNewsletter, setEditingNewsletter] = useState<Newsletter | null>(null);
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     publishDate: ''
@@ -41,12 +42,22 @@ export default function NewslettersPage() {
     }
   };
 
-  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      setPdfFile(file);
-    } else {
-      alert('Please select a valid PDF file');
+    if (file) {
+      const allowedTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp'
+      ];
+      if (allowedTypes.includes(file.type)) {
+        setSelectedFile(file);
+      } else {
+        alert('Please select a valid PDF or image file (JPEG, PNG, GIF, WebP)');
+      }
     }
   };
 
@@ -57,10 +68,10 @@ export default function NewslettersPage() {
       submitData.append('title', formData.title);
       submitData.append('publishDate', formData.publishDate);
       
-      if (pdfFile) {
-        submitData.append('pdf', pdfFile);
+      if (selectedFile) {
+        submitData.append('file', selectedFile);
       } else if (!editingNewsletter) {
-        alert('Please select a PDF file');
+        alert('Please select a file');
         return;
       }
 
@@ -87,11 +98,11 @@ export default function NewslettersPage() {
     }
   };
 
-  const handleDownload = (pdfUrl: string, title: string) => {
-    const downloadUrl = `https://drive.google.com/uc?export=download&id=${pdfUrl}`;
+  const handleDownload = (fileUrl: string, title: string, fileType: string) => {
+    const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileUrl}`;
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = `${title}.pdf`;
+    link.download = `${title}.${fileType}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -104,7 +115,7 @@ export default function NewslettersPage() {
     });
     setEditingNewsletter(null);
     setShowAddModal(false);
-    setPdfFile(null);
+    setSelectedFile(null);
   };
 
   const startEdit = (newsletter: Newsletter) => {
@@ -113,7 +124,7 @@ export default function NewslettersPage() {
       title: newsletter.title,
       publishDate: newsletter.publishDate.split('T')[0] // Format for date input
     });
-    setPdfFile(null);
+    setSelectedFile(null);
     setShowAddModal(true);
   };
 
@@ -166,6 +177,7 @@ export default function NewslettersPage() {
             <thead className="admin-table-header">
               <tr>
                 <th>Title</th>
+                <th>Type</th>
                 <th>Publish Date</th>
                 <th>Created</th>
                 <th>Actions</th>
@@ -180,14 +192,23 @@ export default function NewslettersPage() {
                       <span className="font-medium">{newsletter.title}</span>
                     </div>
                   </td>
+                  <td>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      newsletter.fileType === 'pdf' 
+                        ? 'bg-red-100 text-red-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {newsletter.fileType.toUpperCase()}
+                    </span>
+                  </td>
                   <td>{new Date(newsletter.publishDate).toLocaleDateString()}</td>
                   <td>{new Date(newsletter.createdAt).toLocaleDateString()}</td>
                   <td>
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => handleDownload(newsletter.pdfUrl, newsletter.title)}
+                        onClick={() => handleDownload(newsletter.fileUrl, newsletter.title, newsletter.fileType)}
                         className="btn-admin-secondary btn-admin-sm flex items-center space-x-1"
-                        title="Download PDF"
+                        title={`Download ${newsletter.fileType.toUpperCase()}`}
                       >
                         <Download className="w-3 h-3" />
                         <span>Download</span>
@@ -258,23 +279,23 @@ export default function NewslettersPage() {
 
                 <div className="admin-form-group">
                   <label className="admin-form-label">
-                    PDF File {editingNewsletter && '(Leave empty to keep current file)'}
+                    File Upload {editingNewsletter && '(Leave empty to keep current file)'}
                   </label>
                   <div className="flex items-center space-x-4">
                     <div className="flex-1">
                       <input
                         type="file"
-                        accept=".pdf"
-                        onChange={handlePdfChange}
+                        accept=".pdf,.jpg,.jpeg,.png,.gif,.webp"
+                        onChange={handleFileChange}
                         className="admin-form-input"
                         required={!editingNewsletter}
                       />
-                      <p className="text-xs text-gray-500 mt-1">Upload PDF file (max 10MB)</p>
+                      <p className="text-xs text-gray-500 mt-1">Upload PDF or image file (max 10MB)</p>
                     </div>
-                    {pdfFile && (
+                    {selectedFile && (
                       <div className="flex items-center space-x-2 text-sm text-green-600">
                         <FileText className="w-4 h-4" />
-                        <span>{pdfFile.name}</span>
+                        <span>{selectedFile.name}</span>
                       </div>
                     )}
                   </div>
@@ -284,7 +305,7 @@ export default function NewslettersPage() {
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <div className="flex items-center space-x-2 text-sm text-blue-700">
                       <FileText className="w-4 h-4" />
-                      <span>Current file: {editingNewsletter.title}.pdf</span>
+                      <span>Current file: {editingNewsletter.title}.{editingNewsletter.fileType}</span>
                     </div>
                   </div>
                 )}

@@ -4,7 +4,7 @@ const router = express.Router();
 const Newsletter = require('../models/Newsletter');
 const googleDriveService = require('../services/googleDrive');
 
-// Configure multer for PDF uploads
+// Configure multer for PDF and image uploads
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
@@ -12,10 +12,18 @@ const upload = multer({
     fileSize: 10 * 1024 * 1024 // 10MB limit
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'application/pdf') {
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg', 
+      'image/png',
+      'image/gif',
+      'image/webp'
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only PDF files are allowed'), false);
+      cb(new Error('Only PDF and image files (JPEG, PNG, GIF, WebP) are allowed'), false);
     }
   }
 });
@@ -53,13 +61,17 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST /api/newsletters - Create new newsletter (Admin only)
-router.post('/', upload.single('pdf'), async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
   try {
     const newsletterData = { ...req.body };
     
-    // Handle PDF upload to Google Drive
+    // Handle file upload to Google Drive
     if (req.file) {
       try {
+        // Determine file type
+        const isImage = req.file.mimetype.startsWith('image/');
+        const fileType = isImage ? 'image' : 'pdf';
+        
         // Generate a unique filename
         const timestamp = Date.now();
         const fileName = `newsletter-${timestamp}-${req.file.originalname}`;
@@ -72,16 +84,17 @@ router.post('/', upload.single('pdf'), async (req, res) => {
           'newsletter'
         );
         
-        newsletterData.pdfUrl = uploadResult.id;
-        console.log('Newsletter PDF uploaded to Google Drive:', uploadResult.id);
+        newsletterData.fileUrl = uploadResult.id;
+        newsletterData.fileType = fileType;
+        console.log(`Newsletter ${fileType} uploaded to Google Drive:`, uploadResult.id);
       } catch (driveError) {
         console.error('Google Drive upload failed:', driveError.message);
         return res.status(500).json({ 
-          error: 'Failed to upload PDF. Please check Google Drive configuration and try again.' 
+          error: 'Failed to upload file. Please check Google Drive configuration and try again.' 
         });
       }
     } else {
-      return res.status(400).json({ error: 'PDF file is required' });
+      return res.status(400).json({ error: 'File is required' });
     }
     
     const newsletter = new Newsletter(newsletterData);
@@ -93,13 +106,17 @@ router.post('/', upload.single('pdf'), async (req, res) => {
 });
 
 // PUT /api/newsletters/:id - Update newsletter (Admin only)
-router.put('/:id', upload.single('pdf'), async (req, res) => {
+router.put('/:id', upload.single('file'), async (req, res) => {
   try {
     const updateData = { ...req.body };
     
-    // Handle PDF upload to Google Drive
+    // Handle file upload to Google Drive
     if (req.file) {
       try {
+        // Determine file type
+        const isImage = req.file.mimetype.startsWith('image/');
+        const fileType = isImage ? 'image' : 'pdf';
+        
         // Generate a unique filename
         const timestamp = Date.now();
         const fileName = `newsletter-${timestamp}-${req.file.originalname}`;
@@ -112,12 +129,13 @@ router.put('/:id', upload.single('pdf'), async (req, res) => {
           'newsletter'
         );
         
-        updateData.pdfUrl = uploadResult.id;
-        console.log('Newsletter PDF updated in Google Drive:', uploadResult.id);
+        updateData.fileUrl = uploadResult.id;
+        updateData.fileType = fileType;
+        console.log(`Newsletter ${fileType} updated in Google Drive:`, uploadResult.id);
       } catch (driveError) {
         console.error('Google Drive upload failed:', driveError.message);
         return res.status(500).json({ 
-          error: 'Failed to upload PDF. Please check Google Drive configuration and try again.' 
+          error: 'Failed to upload file. Please check Google Drive configuration and try again.' 
         });
       }
     }

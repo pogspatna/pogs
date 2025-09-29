@@ -1,11 +1,12 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { FileText, Download, Calendar, Search, ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { FileText, Download, Calendar, Search, ChevronDown, ChevronUp, Filter, Image } from 'lucide-react';
 
 interface Newsletter {
   _id: string;
   title: string;
-  pdfUrl: string;
+  fileUrl: string;
+  fileType: 'pdf' | 'image';
   publishDate: string;
   createdAt: string;
 }
@@ -106,15 +107,15 @@ const NewslettersPage = () => {
 
   const handleDownload = (newsletter: Newsletter) => {
     // For Google Drive files, construct the download URL
-    // This assumes the pdfUrl contains the Google Drive file ID
-    const fileId = newsletter.pdfUrl;
+    // This assumes the fileUrl contains the Google Drive file ID
+    const fileId = newsletter.fileUrl;
     const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
     
     // Create a temporary link and trigger download
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.target = '_blank';
-    link.download = `${newsletter.title}.pdf`;
+    link.download = `${newsletter.title}.${newsletter.fileType}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -261,8 +262,16 @@ const NewslettersPage = () => {
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                       <div className="flex-1">
                         <div className="flex items-start space-x-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:shadow-lg transition-shadow">
-                            <FileText className="w-8 h-8 text-white" />
+                          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:shadow-lg transition-shadow ${
+                            newsletter.fileType === 'pdf' 
+                              ? 'bg-gradient-to-br from-red-500 to-red-600' 
+                              : 'bg-gradient-to-br from-blue-500 to-blue-600'
+                          }`}>
+                            {newsletter.fileType === 'pdf' ? (
+                              <FileText className="w-8 h-8 text-white" />
+                            ) : (
+                              <Image className="w-8 h-8 text-white" />
+                            )}
                           </div>
                           
                           <div className="flex-1 min-w-0">
@@ -279,10 +288,20 @@ const NewslettersPage = () => {
                               </div>
                               
                               <div className="flex items-center space-x-2">
-                                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                                  <FileText className="w-4 h-4 text-green-600" />
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                                  newsletter.fileType === 'pdf' 
+                                    ? 'bg-red-100' 
+                                    : 'bg-blue-100'
+                                }`}>
+                                  {newsletter.fileType === 'pdf' ? (
+                                    <FileText className="w-4 h-4 text-red-600" />
+                                  ) : (
+                                    <Image className="w-4 h-4 text-blue-600" />
+                                  )}
                                 </div>
-                                <span className="font-medium">PDF Format</span>
+                                <span className="font-medium">
+                                  {newsletter.fileType === 'pdf' ? 'PDF Format' : 'Image Format'}
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -291,7 +310,7 @@ const NewslettersPage = () => {
                       
                       <div className="flex flex-col sm:flex-row gap-3">
                         <button
-                          onClick={() => window.open(`https://drive.google.com/file/d/${newsletter.pdfUrl}/view`, '_blank')}
+                          onClick={() => window.open(`https://drive.google.com/file/d/${newsletter.fileUrl}/view`, '_blank')}
                           className="btn-secondary btn-sm group/preview"
                         >
                           <FileText className="w-4 h-4 mr-2" />

@@ -41,7 +41,8 @@ export interface OfficeBearer {
 export interface Newsletter {
   _id: string;
   title: string;
-  pdfUrl: string;
+  fileUrl: string;
+  fileType: 'pdf' | 'image';
   publishDate: string;
   createdAt: string;
   updatedAt: string;

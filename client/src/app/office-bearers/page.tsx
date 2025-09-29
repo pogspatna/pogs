@@ -18,7 +18,7 @@ interface OfficeBearer {
 const OfficeBearersPage = () => {
   const [currentBearers, setCurrentBearers] = useState<OfficeBearer[]>([]);
   const [pastBearers, setPastBearers] = useState<OfficeBearer[]>([]);
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | 'all' | null>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,6 +79,17 @@ const OfficeBearersPage = () => {
     return pastBearers
       .filter(bearer => bearer.year === year)
       .sort((a, b) => a.order - b.order);
+  };
+
+  const getAllPastBearers = () => {
+    return pastBearers
+      .sort((a, b) => {
+        // First sort by year (descending), then by order (ascending)
+        if (a.year !== b.year) {
+          return b.year - a.year;
+        }
+        return a.order - b.order;
+      });
   };
 
   const getDesignationIcon = (designation: string) => {
@@ -272,6 +283,23 @@ const OfficeBearersPage = () => {
             <div className="text-center mb-12">
               <p className="text-body text-gray-600 mb-6">Select a year to view the office bearers from that term:</p>
               <div className="flex flex-wrap justify-center gap-3">
+                {/* All Category Button */}
+                <button
+                  onClick={() => setSelectedYear('all')}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                    selectedYear === 'all'
+                      ? 'bg-green-600 text-white shadow-lg transform scale-105'
+                      : 'bg-white text-gray-700 hover:bg-green-50 hover:text-green-600 border-2 border-gray-200 hover:border-green-200 shadow-sm'
+                  }`}
+                >
+                  <Users className="w-4 h-4" />
+                  <span>All Years</span>
+                  <span className="text-xs opacity-75">
+                    ({pastBearers.length})
+                  </span>
+                </button>
+                
+                {/* Individual Year Buttons */}
                 {getUniqueYears().map((year) => (
                   <button
                     key={year}
@@ -296,14 +324,19 @@ const OfficeBearersPage = () => {
             {selectedYear ? (
               <div>
                 <div className="text-center mb-8">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Office Bearers - {selectedYear}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    Office Bearers {selectedYear === 'all' ? '- All Years' : `- ${selectedYear}`}
+                  </h3>
                   <p className="text-body text-gray-600">
-                    {getPastBearersByYear(selectedYear).length} office bearers served during this term
+                    {selectedYear === 'all' 
+                      ? `${pastBearers.length} office bearers served across all terms`
+                      : `${getPastBearersByYear(selectedYear).length} office bearers served during this term`
+                    }
                   </p>
                 </div>
                 
                 <div className="responsive-grid-4">
-                  {getPastBearersByYear(selectedYear).map((bearer, index) => {
+                  {(selectedYear === 'all' ? getAllPastBearers() : getPastBearersByYear(selectedYear)).map((bearer, index) => {
                     const DesignationIcon = getDesignationIcon(bearer.designation);
                     const colorClass = getDesignationColor(bearer.designation);
                     
@@ -384,9 +417,9 @@ const OfficeBearersPage = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Archive className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-subtitle text-gray-900 mb-4">Select a Year</h3>
+                <h3 className="text-subtitle text-gray-900 mb-4">No Office Bearers Found</h3>
                 <p className="text-body text-gray-600 max-w-md mx-auto">
-                  Choose a year from the buttons above to view the office bearers who served during that term.
+                  No office bearers are available for the selected criteria. Please try selecting a different year or check back later.
                 </p>
               </div>
             )}

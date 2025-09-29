@@ -425,7 +425,7 @@ export default function OfficeBearersPage() {
                       value={formData.year}
                       onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
                       className="admin-form-input"
-                      min="2000"
+                      min="1950"
                       max="2050"
                       required
                     />

@@ -16,12 +16,21 @@ async function seedDatabase() {
   try {
     await mongoose.connect(mongoUri);
     
-    // Clear existing data
-    await Member.deleteMany({});
-    await Event.deleteMany({});
-    await OfficeBearer.deleteMany({});
-    await Newsletter.deleteMany({});
-    await ContactInquiry.deleteMany({});
+    // Check if data already exists
+    const existingMembers = await Member.countDocuments();
+    const existingEvents = await Event.countDocuments();
+    const existingOfficeBearers = await OfficeBearer.countDocuments();
+    const existingNewsletters = await Newsletter.countDocuments();
+    const existingContactInquiries = await ContactInquiry.countDocuments();
+    
+    if (existingMembers > 0 || existingEvents > 0 || existingOfficeBearers > 0 || existingNewsletters > 0 || existingContactInquiries > 0) {
+      console.log('Database already contains data. Skipping seed to prevent data loss.');
+      console.log(`Found: ${existingMembers} members, ${existingEvents} events, ${existingOfficeBearers} office bearers, ${existingNewsletters} newsletters, ${existingContactInquiries} contact inquiries`);
+      process.exit(0);
+    }
+    
+    console.log('Database is empty. Proceeding with seed data...');
+    console.log('⚠️  WARNING: This will insert sample data. Only run this on empty databases!');
 
     // Sample Members
     const members = [

@@ -23,7 +23,7 @@ const upload = multer({
 // GET /api/office-bearers - Get all office bearers with year filtering
 router.get('/', async (req, res) => {
   try {
-    const { year, isCurrent, page = 1, limit = 10 } = req.query;
+    const { year, isCurrent } = req.query;
     const query = {};
     
     if (year) {
@@ -35,12 +35,8 @@ router.get('/', async (req, res) => {
     }
 
     const officeBearers = await OfficeBearer.find(query)
-      .sort({ order: 1, name: 1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .sort({ order: 1, name: 1 });
 
-    const total = await OfficeBearer.countDocuments(query);
-    
     // Return direct array for admin compatibility
     res.json(officeBearers);
   } catch (error) {

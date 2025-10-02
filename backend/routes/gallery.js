@@ -23,7 +23,7 @@ const upload = multer({
 // GET /api/gallery - Get all gallery images
 router.get('/', async (req, res) => {
   try {
-    const { active = 'true', page = 1, limit = 20 } = req.query;
+    const { active = 'true' } = req.query;
     const query = {};
     
     if (active === 'true') {
@@ -31,11 +31,7 @@ router.get('/', async (req, res) => {
     }
 
     const images = await Gallery.find(query)
-      .sort({ uploadDate: -1, order: 1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-
-    const total = await Gallery.countDocuments(query);
+      .sort({ uploadDate: -1, order: 1 });
     
     res.json(images);
   } catch (error) {

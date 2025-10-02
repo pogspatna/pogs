@@ -31,15 +31,9 @@ const upload = multer({
 // GET /api/newsletters - Get all newsletters
 router.get('/', async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
-
     const newsletters = await Newsletter.find()
-      .sort({ publishDate: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .sort({ publishDate: -1 });
 
-    const total = await Newsletter.countDocuments();
-    
     // Return direct array for admin compatibility
     res.json(newsletters);
   } catch (error) {

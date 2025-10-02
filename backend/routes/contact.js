@@ -5,7 +5,7 @@ const ContactInquiry = require('../models/ContactInquiry');
 // GET /api/contact - Get all contact inquiries (Admin only)
 router.get('/', async (req, res) => {
   try {
-    const { status, page = 1, limit = 10 } = req.query;
+    const { status } = req.query;
     const query = {};
     
     if (status && ['New', 'Responded'].includes(status)) {
@@ -13,12 +13,8 @@ router.get('/', async (req, res) => {
     }
 
     const inquiries = await ContactInquiry.find(query)
-      .sort({ createdAt: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .sort({ createdAt: -1 });
 
-    const total = await ContactInquiry.countDocuments(query);
-    
     // Return direct array for admin compatibility
     res.json(inquiries);
   } catch (error) {

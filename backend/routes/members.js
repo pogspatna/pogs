@@ -5,7 +5,7 @@ const Member = require('../models/Member');
 // GET /api/members - Get all members with search functionality
 router.get('/', async (req, res) => {
   try {
-    const { search, page = 1, limit = 10 } = req.query;
+    const { search } = req.query;
     const query = {};
     
     if (search) {
@@ -16,12 +16,8 @@ router.get('/', async (req, res) => {
     }
 
     const members = await Member.find(query)
-      .sort({ name: 1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .sort({ name: 1 });
 
-    const total = await Member.countDocuments(query);
-    
     // Return direct array for admin compatibility
     res.json(members);
   } catch (error) {

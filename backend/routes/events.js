@@ -5,7 +5,7 @@ const Event = require('../models/Event');
 // GET /api/events - Get all events with status filtering
 router.get('/', async (req, res) => {
   try {
-    const { status, page = 1, limit = 10 } = req.query;
+    const { status } = req.query;
     const query = {};
     
     if (status && ['Upcoming', 'Ongoing', 'Past'].includes(status)) {
@@ -13,12 +13,8 @@ router.get('/', async (req, res) => {
     }
 
     const events = await Event.find(query)
-      .sort({ date: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .sort({ date: -1 });
 
-    const total = await Event.countDocuments(query);
-    
     // Return direct array for admin compatibility
     res.json(events);
   } catch (error) {

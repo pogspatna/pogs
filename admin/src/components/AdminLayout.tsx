@@ -19,7 +19,8 @@ import {
   ChevronDown,
   ChevronRight,
   Download,
-  Image
+  Image,
+  Building2
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -38,6 +39,7 @@ const navigation: NavigationItem[] = [
   { name: 'Members', href: '/dashboard/members', icon: Users },
   { name: 'Events', href: '/dashboard/events', icon: Calendar },
   { name: 'Office Bearers', href: '/dashboard/office-bearers', icon: Crown },
+  { name: 'Committees', href: '/dashboard/committees', icon: Building2 },
   { name: 'Newsletters', href: '/dashboard/newsletters', icon: FileText },
   { name: 'Gallery', href: '/dashboard/gallery', icon: Image },
   { 

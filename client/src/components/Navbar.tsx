@@ -15,6 +15,7 @@ const Navbar = () => {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About Us' },
     { href: '/office-bearers', label: 'Office Bearers' },
+    { href: '/committees', label: 'POGS Committee' },
     { href: '/members', label: 'Members' },
     { href: '/events', label: 'Events' },
     { href: '/newsletters', label: 'Newsletters' },

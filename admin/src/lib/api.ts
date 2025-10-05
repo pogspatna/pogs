@@ -48,6 +48,19 @@ export interface Newsletter {
   updatedAt: string;
 }
 
+export interface Committee {
+  _id: string;
+  name: string;
+  advisor: string;
+  chairperson: string;
+  coChairperson: string;
+  description?: string;
+  isActive: boolean;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface MembershipApplication {
   _id: string;
   name: string;
@@ -307,6 +320,26 @@ export const galleryAPI = {
     }),
 };
 
+// Committee API
+export const committeesAPI = {
+  getAll: () => apiRequest<Committee[]>('/committees'),
+  getById: (id: string) => apiRequest<Committee>(`/committees/${id}`),
+  create: (data: Omit<Committee, '_id' | 'createdAt' | 'updatedAt'>) =>
+    apiRequest<Committee>('/committees', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  update: (id: string, data: Partial<Committee>) =>
+    apiRequest<Committee>(`/committees/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string) =>
+    apiRequest<{ message: string }>(`/committees/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
 // Unified API Service
 export const apiService = {
   // Members
@@ -435,6 +468,13 @@ export const apiService = {
   deleteGalleryImage: galleryAPI.delete,
   getGalleryDates: galleryAPI.getDates,
   getGalleryByDate: galleryAPI.getByDate,
+
+  // Committees
+  getCommittees: committeesAPI.getAll,
+  getCommittee: committeesAPI.getById,
+  createCommittee: committeesAPI.create,
+  updateCommittee: committeesAPI.update,
+  deleteCommittee: committeesAPI.delete,
 };
 
 export { APIError }; 

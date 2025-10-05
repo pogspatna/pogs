@@ -1,7 +1,6 @@
 {
-  "name": "POGS - Patna Obstetrics & Gynaecological Society",
-  "short_name": "POGS",
-  "description": "Official website of Patna Obstetrics & Gynaecological Society",
+  "name": "pogspatna",
+  "short_name": "pogs",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -16,9 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#1e40af",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone",
-  "start_url": "/",
-  "scope": "/"
+  "display": "standalone"
 }

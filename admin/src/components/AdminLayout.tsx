@@ -20,7 +20,8 @@ import {
   ChevronRight,
   Download,
   Image,
-  Building2
+  Building2,
+  AlertCircle
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -42,6 +43,7 @@ const navigation: NavigationItem[] = [
   { name: 'Committees', href: '/dashboard/committees', icon: Building2 },
   { name: 'Newsletters', href: '/dashboard/newsletters', icon: FileText },
   { name: 'Gallery', href: '/dashboard/gallery', icon: Image },
+  { name: 'Notices', href: '/dashboard/notices', icon: AlertCircle },
   { 
     name: 'Applications', 
     href: '/dashboard/applications', 

@@ -105,6 +105,15 @@ export interface Gallery {
   updatedAt: string;
 }
 
+export interface Notice {
+  _id: string;
+  title: string;
+  content: string;
+  expiryDate: string; // ISO date string
+  createdAt: string;
+  updatedAt: string;
+}
+
 // API Error handling
 class APIError extends Error {
   constructor(public status: number, message: string) {
@@ -360,6 +369,26 @@ export const committeesAPI = {
     }),
 };
 
+// Notices API
+export const noticesAPI = {
+  getActive: () => apiRequest<Notice[]>('/notices'),
+  getAll: () => apiRequest<Notice[]>('/notices/all'),
+  create: (data: Omit<Notice, '_id' | 'createdAt' | 'updatedAt'>) =>
+    apiRequest<Notice>('/notices', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  update: (id: string, data: Partial<Notice>) =>
+    apiRequest<Notice>(`/notices/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string) =>
+    apiRequest<{ message: string }>(`/notices/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
 // Unified API Service
 export const apiService = {
   // Members
@@ -497,6 +526,13 @@ export const apiService = {
   createCommittee: committeesAPI.create,
   updateCommittee: committeesAPI.update,
   deleteCommittee: committeesAPI.delete,
+
+  // Notices
+  getActiveNotices: noticesAPI.getActive,
+  getAllNotices: noticesAPI.getAll,
+  createNotice: noticesAPI.create,
+  updateNotice: noticesAPI.update,
+  deleteNotice: noticesAPI.delete,
 };
 
 export { APIError }; 

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { FileText, Download, Calendar, Search, ChevronDown, ChevronUp, Filter, Image } from 'lucide-react';
+import { FileText, Download, Calendar, Search, ChevronDown, ChevronUp, Filter, Image as ImageIcon, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface Newsletter {
   _id: string;
@@ -19,6 +20,7 @@ const NewslettersPage = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedNewsletter, setSelectedNewsletter] = useState<Newsletter | null>(null);
 
   const fetchNewsletters = useCallback(async () => {
     try {
@@ -119,6 +121,14 @@ const NewslettersPage = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handlePreview = (newsletter: Newsletter) => {
+    setSelectedNewsletter(newsletter);
+  };
+
+  const closeModal = () => {
+    setSelectedNewsletter(null);
   };
 
   if (loading) {
@@ -270,7 +280,7 @@ const NewslettersPage = () => {
                             {newsletter.fileType === 'pdf' ? (
                               <FileText className="w-8 h-8 text-white" />
                             ) : (
-                              <Image className="w-8 h-8 text-white" />
+                              <ImageIcon className="w-8 h-8 text-white" />
                             )}
                           </div>
                           
@@ -296,7 +306,7 @@ const NewslettersPage = () => {
                                   {newsletter.fileType === 'pdf' ? (
                                     <FileText className="w-4 h-4 text-red-600" />
                                   ) : (
-                                    <Image className="w-4 h-4 text-blue-600" />
+                                    <ImageIcon className="w-4 h-4 text-blue-600" />
                                   )}
                                 </div>
                                 <span className="font-medium">
@@ -310,19 +320,19 @@ const NewslettersPage = () => {
                       
                       <div className="flex flex-col sm:flex-row gap-3">
                         <button
-                          onClick={() => window.open(`https://drive.google.com/file/d/${newsletter.fileUrl}/view`, '_blank')}
-                          className="btn-secondary btn-sm group/preview"
+                          onClick={() => handlePreview(newsletter)}
+                          className="btn-secondary btn-sm group/preview flex items-center justify-center"
                         >
-                          <FileText className="w-4 h-4 mr-2" />
-                          Preview
+                          <FileText className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span>Preview</span>
                         </button>
                         
                         <button
                           onClick={() => handleDownload(newsletter)}
-                          className="btn-primary btn-sm group/download"
+                          className="btn-primary btn-sm group/download flex items-center justify-center"
                         >
-                          <Download className="w-4 h-4 mr-2 group-hover/download:translate-y-1 transition-transform" />
-                          Download
+                          <Download className="w-4 h-4 mr-2 flex-shrink-0 group-hover/download:translate-y-1 transition-transform" />
+                          <span>Download</span>
                         </button>
                       </div>
                     </div>
@@ -374,6 +384,101 @@ const NewslettersPage = () => {
           )}
         </div>
       </div>
+
+      {/* Newsletter Preview Modal */}
+      {selectedNewsletter && (
+        <div className="modal-overlay">
+          <div className="modal-content max-w-6xl">
+            <div className="modal-header">
+              <div className="flex items-center space-x-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  selectedNewsletter.fileType === 'pdf' 
+                    ? 'bg-gradient-to-br from-red-500 to-red-600' 
+                    : 'bg-gradient-to-br from-blue-500 to-blue-600'
+                }`}>
+                  {selectedNewsletter.fileType === 'pdf' ? (
+                    <FileText className="w-5 h-5 text-white" />
+                  ) : (
+                    <ImageIcon className="w-5 h-5 text-white" />
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">{selectedNewsletter.title}</h2>
+                  <p className="text-sm text-gray-600">
+                    Published: {formatDate(selectedNewsletter.publishDate)} • {selectedNewsletter.fileType.toUpperCase()} Format
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={closeModal}
+                className="btn-ghost btn-sm !p-2"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="modal-body p-0">
+              <div className="bg-gray-50 rounded-lg overflow-hidden">
+                {selectedNewsletter.fileType === 'pdf' ? (
+                  <iframe
+                    src={`https://drive.google.com/file/d/${selectedNewsletter.fileUrl}/preview`}
+                    className="w-full h-[70vh] border-0"
+                    title={selectedNewsletter.title}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center p-8">
+                    <Image
+                      src={`https://drive.google.com/thumbnail?id=${selectedNewsletter.fileUrl}&sz=w1920-h1080`}
+                      alt={selectedNewsletter.title}
+                      width={800}
+                      height={600}
+                      className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
+                      onError={(e) => {
+                        // Fallback to direct view URL if thumbnail fails
+                        if (selectedNewsletter.fileUrl) {
+                          e.currentTarget.src = `https://drive.google.com/uc?export=view&id=${selectedNewsletter.fileUrl}`;
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>{formatDate(selectedNewsletter.publishDate)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <div className={`w-2 h-2 rounded-full ${
+                      selectedNewsletter.fileType === 'pdf' ? 'bg-red-500' : 'bg-blue-500'
+                    }`}></div>
+                    <span>{selectedNewsletter.fileType.toUpperCase()}</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => handleDownload(selectedNewsletter)}
+                    className="btn-primary btn-sm flex items-center justify-center"
+                  >
+                    <Download className="w-4 h-4 mr-2 flex-shrink-0" />
+                    <span>Download</span>
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="btn-secondary btn-sm flex items-center justify-center"
+                  >
+                    <span>Close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

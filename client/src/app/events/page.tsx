@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Calendar, MapPin, ChevronRight, Filter, X, Search } from 'lucide-react';
+import Image from 'next/image';
 
 interface Event {
   _id: string;
@@ -121,9 +122,11 @@ const EventsPage = () => {
           </button>
         </div>
         <div className="modal-body p-0">
-          <img
+          <Image
             src={event.image ? `https://drive.google.com/thumbnail?id=${event.image}&sz=w1920-h1080` : '/favicon.svg'}
             alt={`${event.name} image`}
+            width={800}
+            height={600}
             className="w-full object-contain"
             loading="lazy"
             onError={(e) => {

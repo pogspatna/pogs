@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface ImageWithFallbackProps {
   fileId: string;
@@ -51,9 +52,11 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   }
 
   return (
-    <img
+    <Image
       src={urlFormats[currentUrlIndex]}
       alt={alt}
+      width={300}
+      height={200}
       className={className}
       onError={handleError}
       onLoad={handleLoad}

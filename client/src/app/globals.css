@@ -407,3 +407,12 @@ body {
 .modal-footer {
   @apply p-8 pt-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl;
 }
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

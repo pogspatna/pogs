@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, Calendar, Upload, X } from 'lucide-react';
 import { apiService } from '@/lib/api';
 import Toast from '@/components/Toast';
+import Image from 'next/image';
 
 interface GalleryImage {
   _id: string;
@@ -55,7 +56,7 @@ export default function GalleryPage() {
 
   useEffect(() => {
     fetchImages();
-  }, []);
+  }, [fetchImages]);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -236,9 +237,11 @@ export default function GalleryPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {selectedFiles.map((file, index) => (
                 <div key={index} className="relative group">
-                  <img
+                  <Image
                     src={URL.createObjectURL(file)}
                     alt={file.name}
+                    width={96}
+                    height={96}
                     className="w-full h-24 object-cover rounded-lg"
                   />
                   <button
@@ -297,9 +300,11 @@ export default function GalleryPage() {
               {images.map((image) => (
                 <div key={image._id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                   <div className="aspect-w-16 aspect-h-12">
-                    <img
+                    <Image
                       src={getImageUrl(image.imageUrl)}
                       alt={image.title}
+                      width={300}
+                      height={192}
                       className="w-full h-48 object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;

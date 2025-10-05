@@ -13,7 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://pogspatna.org'),
-  title: "POGS - Patna Obstetrics & Gynaecological Society",
+  title: "POGS - Patna Obstetric & Gynaecological Society",
   description: "Official website of Patna Obstetrics & Gynaecological Society. Connecting medical professionals and advancing obstetrics and gynaecology in Bihar, India.",
   keywords: "POGS, Patna, Obstetrics, Gynaecology, Medical Society, Bihar, Healthcare, Medical Education",
   authors: [{ name: "POGS" }],
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://pogspatna.org",
-    title: "POGS - Patna Obstetrics & Gynaecological Society",
+    title: "POGS - Patna Obstetric & Gynaecological Society",
     description: "Official website of Patna Obstetrics & Gynaecological Society",
     siteName: "POGS",
     images: [
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "POGS - Patna Obstetrics & Gynaecological Society",
+    title: "POGS - Patna Obstetric & Gynaecological Society",
     description: "Official website of Patna Obstetrics & Gynaecological Society",
     images: ['/web-app-manifest-512x512.png'],
   },

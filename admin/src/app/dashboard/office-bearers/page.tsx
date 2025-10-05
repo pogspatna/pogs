@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Users, Plus, Edit, Trash2, Search, Calendar } from 'lucide-react';
 import { apiService } from '@/lib/api';
+import Image from 'next/image';
 
 interface OfficeBearer {
   _id: string;
@@ -242,9 +243,11 @@ export default function OfficeBearersPage() {
                 <div className="mb-4">
                   {bearer.photo && !bearer.photo.startsWith('local-') && !failedImages.has(bearer.photo) ? (
                     <div className="relative">
-                      <img
+                      <Image
                         src={getCurrentImageUrl(bearer.photo)}
                         alt={bearer.name}
+                        width={96}
+                        height={96}
                         className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-100"
                         onError={() => {
                           handleImageError(bearer.photo);
@@ -339,15 +342,19 @@ export default function OfficeBearersPage() {
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       {photoPreview ? (
-                        <img
+                        <Image
                           src={photoPreview}
                           alt="Preview"
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                         />
                       ) : editingBearer?.photo && !editingBearer.photo.startsWith('local-') && !failedImages.has(editingBearer.photo) ? (
-                        <img
+                        <Image
                           src={getCurrentImageUrl(editingBearer.photo)}
                           alt="Current"
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                           onError={() => {
                             handleImageError(editingBearer.photo);

@@ -38,6 +38,7 @@ try {
   app.use('/api/dashboard', require('./routes/dashboard'));
   app.use('/api/gallery', require('./routes/gallery'));
   app.use('/api/committees', require('./routes/committees'));
+  app.use('/api/notices', require('./routes/notices'));
 } catch (error) {
   // Log error for debugging but don't expose details
   if (process.env.NODE_ENV !== 'production') {

@@ -72,7 +72,7 @@ const OfficeBearersPage = () => {
 
   const getUniqueYears = () => {
     const years = [...new Set(pastBearers.map(bearer => bearer.year))];
-    return years.sort((a, b) => b - a);
+    return years.sort((a, b) => a - b);
   };
 
   const getPastBearersByYear = (year: number) => {

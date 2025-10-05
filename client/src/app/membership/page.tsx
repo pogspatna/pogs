@@ -14,6 +14,8 @@ interface MembershipForm {
   qualification: string;
   dateOfBirth: string;
   paymentScreenshot: File | null;
+  signature: File | null;
+  paymentTransactionId: string;
 }
 
 interface OfflineForm {
@@ -35,7 +37,9 @@ const MembershipPage = () => {
     membershipType: 'Life',
     qualification: '',
     dateOfBirth: '',
-    paymentScreenshot: null
+    paymentScreenshot: null,
+    signature: null,
+    paymentTransactionId: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -78,6 +82,14 @@ const MembershipPage = () => {
     }));
   };
 
+  const handleSignatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({
+      ...prev,
+      signature: file
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -89,6 +101,8 @@ const MembershipPage = () => {
       // Append all form fields
       Object.entries(formData).forEach(([key, value]) => {
         if (key === 'paymentScreenshot' && value instanceof File) {
+          formDataToSend.append(key, value);
+        } else if (key === 'signature' && value instanceof File) {
           formDataToSend.append(key, value);
         } else if (key !== 'paymentScreenshot') {
           formDataToSend.append(key, value as string);
@@ -119,12 +133,16 @@ const MembershipPage = () => {
         membershipType: 'Life',
         qualification: '',
         dateOfBirth: '',
-        paymentScreenshot: null
+        paymentScreenshot: null,
+        signature: null,
+        paymentTransactionId: ''
       });
       
       // Reset file input
       const fileInput = document.getElementById('paymentScreenshot') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
+      const sigInput = document.getElementById('signature') as HTMLInputElement;
+      if (sigInput) sigInput.value = '';
       
     } catch (error) {
       setSubmitStatus('error');
@@ -607,6 +625,21 @@ const MembershipPage = () => {
                       </h4>
                       <div className="form-group">
                         <label className="form-label form-label-required">
+                          UTR / Transaction ID
+                        </label>
+                        <input
+                          type="text"
+                          name="paymentTransactionId"
+                          required
+                          value={formData.paymentTransactionId}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder="Enter your payment UTR/Transaction ID"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Enter the reference number from your payment receipt.</p>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label form-label-required">
                           <Upload className="w-4 h-4 inline mr-2" />
                           Upload Payment Screenshot
                         </label>
@@ -626,6 +659,39 @@ const MembershipPage = () => {
                           <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <p className="text-sm text-green-700 font-medium">
                               ✓ File selected: {formData.paymentScreenshot.name}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Signature Upload Section */}
+                    <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 md:p-8">
+                      <h4 className="text-lg font-bold text-gray-900 mb-6 pb-3 border-b-2 border-gray-200 flex items-center">
+                        <Upload className="w-5 h-5 mr-3 text-blue-600" />
+                        Applicant Signature
+                      </h4>
+                      <div className="form-group">
+                        <label className="form-label form-label-required">
+                          <Upload className="w-4 h-4 inline mr-2" />
+                          Upload Signature Image
+                        </label>
+                        <input
+                          type="file"
+                          id="signature"
+                          name="signature"
+                          required
+                          accept="image/*"
+                          onChange={handleSignatureChange}
+                          className="form-input text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        />
+                        <p className="text-sm text-gray-500 mt-2">
+                          Upload a clear image of your signature (JPG or PNG preferred)
+                        </p>
+                        {formData.signature && (
+                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-sm text-green-700 font-medium">
+                              ✓ File selected: {formData.signature.name}
                             </p>
                           </div>
                         )}

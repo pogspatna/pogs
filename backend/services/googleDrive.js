@@ -15,6 +15,7 @@ class GoogleDriveService {
       applications: process.env.GOOGLE_DRIVE_APPLICATIONS_FOLDER_ID,
       paymentScreenshots: process.env.GOOGLE_DRIVE_PAYMENT_SCREENSHOTS_FOLDER_ID,
       gallery: process.env.GOOGLE_DRIVE_GALLERY_FOLDER_ID,
+      events: process.env.GOOGLE_DRIVE_EVENTS_FOLDER_ID,
       root: process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID || process.env.GOOGLE_DRIVE_FOLDER_ID
     };
   }
@@ -83,6 +84,9 @@ class GoogleDriveService {
           break;
         case 'gallery':
           targetFolderId = this.folderIds.gallery || this.folderIds.root;
+          break;
+        case 'event':
+          targetFolderId = this.folderIds.events || this.folderIds.root;
           break;
         default:
           targetFolderId = this.folderIds.root;

@@ -13,7 +13,7 @@ const eventSchema = new mongoose.Schema({
   },
   detailedDescription: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   date: {
@@ -29,6 +29,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     enum: ['Upcoming', 'Ongoing', 'Past'],
     default: 'Upcoming'
+  },
+  image: {
+    type: String, // Google Drive file ID for event image
+    required: false
   }
 }, {
   timestamps: true

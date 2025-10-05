@@ -6,11 +6,12 @@ interface Event {
   _id: string;
   name: string;
   shortDescription: string;
-  detailedDescription: string;
+  detailedDescription?: string;
   date: string;
   location: string;
   status: 'Upcoming' | 'Ongoing' | 'Past';
   createdAt: string;
+  image?: string;
 }
 
 const EventsPage = () => {
@@ -111,63 +112,27 @@ const EventsPage = () => {
   const EventDetailModal = ({ event, onClose }: { event: Event; onClose: () => void }) => (
     <div className="modal-overlay">
       <div className="modal-content">
-        <div className="modal-header">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-title text-gray-900">{event.name}</h2>
-                  <span className={`${getStatusColor(event.status)} mt-1`}>
-                    {event.status}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="btn-ghost btn-sm ml-4 !p-2"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="modal-header flex justify-end">
+          <button
+            onClick={onClose}
+            className="btn-ghost btn-sm ml-4 !p-2"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
-
-        <div className="modal-body">
-          <div className="space-y-6 mb-8">
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">Event Date</p>
-                <p className="text-gray-600">{formatDate(event.date)}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">Location</p>
-                <p className="text-gray-600">{event.location}</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-200">
-              Event Details
-            </h3>
-            <div className="prose prose-gray max-w-none">
-              <p className="text-body text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {event.detailedDescription}
-              </p>
-            </div>
-          </div>
+        <div className="modal-body p-0">
+          <img
+            src={event.image ? `https://drive.google.com/thumbnail?id=${event.image}&sz=w1920-h1080` : '/favicon.svg'}
+            alt={`${event.name} image`}
+            className="w-full object-contain"
+            loading="lazy"
+            onError={(e) => {
+              // Fallback to direct view URL if thumbnail fails
+              if (event.image) {
+                e.currentTarget.src = `https://drive.google.com/uc?export=view&id=${event.image}`;
+              }
+            }}
+          />
         </div>
       </div>
     </div>

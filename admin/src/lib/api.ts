@@ -186,6 +186,26 @@ export const eventsAPI = {
     apiRequest<{ message: string }>(`/events/${id}`, {
       method: 'DELETE',
     }),
+  createFormData: async (formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/events`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new APIError(response.status, `HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  },
+  updateFormData: async (id: string, formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/events/${id}`, {
+      method: 'PUT',
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new APIError(response.status, `HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  },
 };
 
 // Office Bearers API
@@ -354,6 +374,8 @@ export const apiService = {
   getEvent: eventsAPI.getById,
   createEvent: eventsAPI.create,
   updateEvent: eventsAPI.update,
+  createEventFormData: eventsAPI.createFormData,
+  updateEventFormData: eventsAPI.updateFormData,
   deleteEvent: eventsAPI.delete,
 
   // Office Bearers

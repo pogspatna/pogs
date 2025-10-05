@@ -1,4 +1,6 @@
 import { Award, Users, Target, Eye, Heart, Stethoscope } from 'lucide-react';
+import { Clock, Star } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
@@ -57,6 +59,64 @@ export default function AboutPage() {
                 highest quality reproductive healthcare services delivered by skilled and 
                 knowledgeable professionals.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Founders Section */}
+      <section className="py-20 bg-slate-50">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center space-x-2 bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold mb-3">
+                <Clock size={16} />
+                <span>Founded 1958</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Our Visionary Founders</h2>
+              <p className="text-gray-600">Pioneers of women&apos;s healthcare in Bihar</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="card p-8 md:p-10">
+                <div className="flex items-center space-x-5 md:space-x-6">
+                  <div className="relative flex-shrink-0">
+                    <div className="relative w-24 h-32 md:w-28 md:h-36 rounded-2xl overflow-hidden border border-emerald-200 bg-emerald-50">
+                      <Image src="/mp_john.png" alt="Dr. M.P. John" fill className="object-cover" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 md:w-7 md:h-7 bg-emerald-400 rounded-full flex items-center justify-center">
+                      <Star size={14} className="text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Dr. M.P. John</h3>
+                    <p className="text-base md:text-lg text-gray-600">The first lady Obstetrician &amp; Gynecologist of Bihar, founding president of POGS</p>
+                    <p className="text-emerald-700 text-sm md:text-base mt-2">Founder President</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card p-8 md:p-10">
+                <div className="flex items-center space-x-5 md:space-x-6">
+                  <div className="relative flex-shrink-0">
+                    <div className="relative w-24 h-32 md:w-28 md:h-36 rounded-2xl overflow-hidden border border-teal-200 bg-teal-50">
+                      <Image src="/sn_upadhyay.png" alt="Dr. S.N. Upadhyay" fill className="object-cover" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 md:w-7 md:h-7 bg-teal-400 rounded-full flex items-center justify-center">
+                      <Star size={14} className="text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Dr. S.N. Upadhyay</h3>
+                    <p className="text-base md:text-lg text-gray-600">Founding secretary of P.O.G.S., instrumental in establishing the society</p>
+                    <p className="text-teal-700 text-sm md:text-base mt-2">Founder Secretary</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-600">Previously <span className="font-semibold">Bihar Obstetric and Gynaecological Society</span></p>
             </div>
           </div>
         </div>
@@ -222,47 +282,6 @@ export default function AboutPage() {
                 <h4 className="font-semibold text-gray-900 mb-2">Recognition</h4>
                 <p className="text-gray-600">National recognition and accreditation</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Organizational Structure */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Organizational Structure
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              POGS operates under a structured governance model ensuring transparency, 
-              accountability, and effective leadership in advancing our mission.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Executive Committee</h4>
-              <p className="text-gray-600">Strategic leadership and governance oversight</p>
-            </div>
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Medical Advisory Board</h4>
-              <p className="text-gray-600">Clinical expertise and professional guidance</p>
-            </div>
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Educational Committee</h4>
-              <p className="text-gray-600">CME programs and educational initiatives</p>
-            </div>
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Research Committee</h4>
-              <p className="text-gray-600">Research promotion and scholarly activities</p>
-            </div>
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Ethics Committee</h4>
-              <p className="text-gray-600">Ethical standards and professional conduct</p>
-            </div>
-            <div className="card p-6 text-center">
-              <h4 className="font-semibold text-gray-900 mb-2">Membership Committee</h4>
-              <p className="text-gray-600">Member services and community engagement</p>
             </div>
           </div>
         </div>

@@ -18,6 +18,9 @@ interface MembershipApplication {
   dateOfBirth: string;
   paymentScreenshot: string; // Google Drive file ID
   applicationPdf: string; // Google Drive file ID
+  signature?: string; // Google Drive file ID for signature image
+  applicationIdentifier?: string; // Unique application identifier
+  paymentTransactionId?: string;
   status: 'Pending' | 'Approved' | 'Rejected';
   submittedAt: string;
   processedAt?: string;
@@ -286,6 +289,12 @@ export default function ApplicationsPage() {
                         {selectedApplication.membershipType} - {selectedApplication.membershipType === 'Life' ? '₹15,000' : '₹1,500'}
                       </span>
                     </div>
+                    {selectedApplication.paymentTransactionId && (
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">UTR / Transaction ID</label>
+                        <p className="text-gray-900 break-all">{selectedApplication.paymentTransactionId}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -338,6 +347,12 @@ export default function ApplicationsPage() {
                       <label className="text-sm font-medium text-gray-500">Submitted Date</label>
                       <p className="text-gray-900">{new Date(selectedApplication.submittedAt).toLocaleDateString()}</p>
                     </div>
+                    {selectedApplication.paymentTransactionId && (
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">UTR / Transaction ID</label>
+                        <p className="text-gray-900 break-all">{selectedApplication.paymentTransactionId}</p>
+                      </div>
+                    )}
                     {selectedApplication.processedAt && (
                       <div>
                         <label className="text-sm font-medium text-gray-500">Processed Date</label>
@@ -361,6 +376,18 @@ export default function ApplicationsPage() {
                         <span>Download</span>
                       </button>
                     </div>
+                    {selectedApplication.signature && (
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <h4 className="font-medium text-gray-900 mb-2">Signature</h4>
+                        <button
+                          onClick={() => handleDownloadPayment(selectedApplication.signature as string, selectedApplication.name)}
+                          className="btn-admin-secondary btn-admin-sm flex items-center space-x-1"
+                        >
+                          <Download className="w-3 h-3" />
+                          <span>Download</span>
+                        </button>
+                      </div>
+                    )}
                     {selectedApplication.applicationPdf && (
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h4 className="font-medium text-gray-900 mb-2">Application PDF</h4>

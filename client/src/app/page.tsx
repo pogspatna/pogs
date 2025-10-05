@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { Users, Calendar, FileText, UserCheck, MapPin, Award, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe, Clock } from 'lucide-react';
+import { Users, Calendar, FileText, UserCheck, MapPin, Award, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe } from 'lucide-react';
 import EventsCarousel from '@/components/EventsCarousel';
 
 export default function HomePage() {
@@ -60,7 +59,7 @@ export default function HomePage() {
               {/* Main Headline */}
               <div className="space-y-4 md:space-y-6">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-                  Patna Obstetrics &
+                  Patna Obstetric &
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-blue-300">
                     Gynaecological Society
                   </span>
@@ -81,9 +80,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <p className="text-lg md:text-xl lg:text-2xl text-blue-100 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Advancing Excellence in Women&apos;s Healthcare Through Professional Collaboration &amp; Continuous Learning
-                </p>
+                
 
                 <p className="text-base md:text-lg text-blue-50 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   Join Bihar&apos;s leading medical society dedicated to promoting the highest standards 
@@ -114,7 +111,7 @@ export default function HomePage() {
               {/* Trust Indicators - Enhanced */}
               <div className="grid grid-cols-3 gap-3 md:gap-6 pt-6 md:pt-8 border-t border-white/20">
                 <div className="text-center group">
-                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2 group-hover:scale-110 transition-transform">500+</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2 group-hover:scale-110 transition-transform">950+</div>
                   <div className="text-blue-200 text-xs md:text-sm font-medium">Active Members</div>
                   <div className="w-8 md:w-12 h-1 bg-gradient-to-r from-green-400 to-blue-400 rounded-full mx-auto mt-1 md:mt-2"></div>
                 </div>
@@ -131,98 +128,20 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Founders & Events */}
+            {/* Right Column: Events */}
             <div className="lg:col-span-5 space-y-6 md:space-y-8 mt-8 lg:mt-0">
-              {/* Enhanced Founders Section */}
-              <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 backdrop-blur-lg border border-emerald-200/20 rounded-3xl p-4 md:p-6 shadow-2xl">
-                <div className="text-center mb-4 md:mb-6">
-                  <div className="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-300 px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-semibold mb-2 md:mb-3">
-                    <Clock className="w-3 h-3 md:w-4 md:h-4" />
-                    <span>Founded 1958</span>
-                  </div>
-                  <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-2">Our Visionary Founders</h3>
-                  <p className="text-emerald-100 text-xs md:text-sm">Pioneers of Women&apos;s Healthcare in Bihar</p>
-                </div>
-                
-                <div className="space-y-3 md:space-y-4">
-                  {/* Founder 1 - Enhanced */}
-                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-3 md:p-4 hover:bg-white/15 transition-all duration-300 group">
-                    <div className="flex items-center space-x-3 md:space-x-4">
-                      <div className="relative flex-shrink-0">
-                        <div className="w-12 h-14 md:w-16 md:h-20 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-xl overflow-hidden border-2 border-emerald-200/30">
-                          <Image 
-                            src="/mp_john.png" 
-                            alt="Dr. M.P. John" 
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center">
-                          <Star className="w-2 h-2 md:w-3 md:h-3 text-white fill-current" />
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">Dr. M.P. John</h4>
-                        <p className="text-emerald-100 text-xs md:text-sm leading-relaxed">
-                          The first lady Obstetrician &amp; Gynecologist of Bihar, founding president of POGS
-                        </p>
-                        <div className="flex items-center space-x-1 mt-1 md:mt-2">
-                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-400 rounded-full"></div>
-                          <span className="text-emerald-200 text-xs">Founder President</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Founder 2 - Enhanced */}
-                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-3 md:p-4 hover:bg-white/15 transition-all duration-300 group">
-                    <div className="flex items-center space-x-3 md:space-x-4">
-                      <div className="relative flex-shrink-0">
-                        <div className="w-12 h-14 md:w-16 md:h-20 bg-gradient-to-br from-teal-400/20 to-cyan-400/20 rounded-xl overflow-hidden border-2 border-teal-200/30">
-                          <Image 
-                            src="/sn_upadhyay.png" 
-                            alt="Dr. S.N. Upadhyay" 
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full flex items-center justify-center">
-                          <Star className="w-2 h-2 md:w-3 md:h-3 text-white fill-current" />
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-teal-300 transition-colors">Dr. S.N. Upadhyay</h4>
-                        <p className="text-emerald-100 text-xs md:text-sm leading-relaxed">
-                          Founding secretary of P.O.G.S., instrumental in establishing the society
-                        </p>
-                        <div className="flex items-center space-x-1 mt-1 md:mt-2">
-                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-teal-400 rounded-full"></div>
-                          <span className="text-teal-200 text-xs">Founder Secretary</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 md:mt-6 pt-3 md:pt-4 border-t border-white/20 text-center">
-                  <p className="text-emerald-100 text-xs md:text-sm">
-                    Previously <span className="font-semibold text-emerald-200">Bihar Obstetric and Gynaecological Society</span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Events Carousel - Enhanced */}
-              <div className="bg-gradient-to-br from-purple-900/30 to-indigo-900/30 backdrop-blur-lg border border-purple-200/20 rounded-3xl p-4 md:p-6 shadow-2xl">
-                <div className="flex items-center justify-between mb-3 md:mb-4">
-                  <h3 className="text-lg md:text-xl font-bold text-white">Upcoming Events</h3>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span className="text-purple-200 text-xs md:text-sm">Live Updates</span>
-                  </div>
-                </div>
-                <EventsCarousel limit={4} showArrows={true} />
-              </div>
-            </div>
+               {/* Events Carousel - Enhanced */}
+               <div className="bg-gradient-to-br from-purple-900/30 to-indigo-900/30 backdrop-blur-lg border border-purple-200/20 rounded-3xl p-4 md:p-6 shadow-2xl">
+                 <div className="flex items-center justify-between mb-3 md:mb-4">
+                   <h3 className="text-lg md:text-xl font-bold text-white">Upcoming Events</h3>
+                   <div className="flex items-center space-x-1">
+                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                     <span className="text-purple-200 text-xs md:text-sm">Live Updates</span>
+                   </div>
+                 </div>
+                 <EventsCarousel limit={4} showArrows={true} />
+               </div>
+             </div>
           </div>
         </div>
 

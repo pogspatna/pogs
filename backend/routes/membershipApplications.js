@@ -5,6 +5,7 @@ const MembershipApplication = require('../models/MembershipApplication');
 const Member = require('../models/Member');
 const OfflineForm = require('../models/OfflineForm');
 const googleDriveService = require('../services/googleDrive');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 
 // Configure multer for image uploads (payment screenshots)
 const storage = multer.memoryStorage();
@@ -118,23 +119,25 @@ router.post('/offline-form', pdfUpload.single('pdf'), async (req, res) => {
 });
 
 // POST /api/membership-applications - Submit new application
-router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
+router.post('/', upload.fields([
+  { name: 'paymentScreenshot', maxCount: 1 },
+  { name: 'signature', maxCount: 1 }
+]), async (req, res) => {
   try {
     let paymentScreenshotId = null;
+    let signatureId = null;
+    // Generate a unique identifier per application for filenames and traceability
+    const uid = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
     
-    if (req.file) {
+    const paymentFile = req.files && Array.isArray(req.files['paymentScreenshot']) ? req.files['paymentScreenshot'][0] : null;
+    const signatureFile = req.files && Array.isArray(req.files['signature']) ? req.files['signature'][0] : null;
+
+    if (paymentFile) {
       try {
-        // Generate a unique filename
-        const timestamp = Date.now();
-        const fileName = `payment-screenshot-${timestamp}-${req.file.originalname}`;
+        // Upload payment screenshot
+        const fileName = `membership-payment-${uid}-${paymentFile.originalname}`;
         
-        // Upload to Google Drive (payment-screenshots folder)
-        const uploadResult = await googleDriveService.uploadFile(
-          req.file.buffer,
-          fileName,
-          req.file.mimetype,
-          'payment-screenshot'
-        );
+        const uploadResult = await googleDriveService.uploadFile(paymentFile.buffer, fileName, paymentFile.mimetype, 'payment-screenshot');
         
         paymentScreenshotId = uploadResult.id;
         console.log('Payment screenshot uploaded to Google Drive:', uploadResult.id);
@@ -148,18 +151,237 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
       return res.status(400).json({ error: 'Payment screenshot is required' });
     }
 
+    if (signatureFile) {
+      try {
+        const sigName = `membership-signature-${uid}-${signatureFile.originalname}`;
+        const sigUpload = await googleDriveService.uploadFile(signatureFile.buffer, sigName, signatureFile.mimetype, 'payment-screenshot');
+        signatureId = sigUpload.id;
+        console.log('Signature image uploaded to Google Drive:', signatureId);
+      } catch (driveError) {
+        console.error('Google Drive upload failed (signature):', driveError.message);
+        return res.status(500).json({ 
+          error: 'Failed to upload signature image. Please check your file and try again.' 
+        });
+      }
+    } else {
+      return res.status(400).json({ error: 'Signature image is required' });
+    }
+
     const applicationData = {
       ...req.body,
       paymentScreenshot: paymentScreenshotId,
+      signature: signatureId,
+      applicationIdentifier: uid,
       dateOfBirth: new Date(req.body.dateOfBirth)
     };
 
     const application = new MembershipApplication(applicationData);
+
+    // Generate PDF summary of application
+    try {
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([595.28, 841.89]); // A4 portrait in points
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const { width, height } = page.getSize();
+      const margin = 50;
+      const contentWidth = width - (2 * margin);
+
+      let cursorY = height - margin;
+
+      const drawText = (text, x, y, size = 12, bold = false, color = rgb(0, 0, 0)) => {
+        page.drawText(text, { x, y, size, font: bold ? fontBold : font, color });
+      };
+
+      const drawLine = (x1, y1, x2, y2, color = rgb(0.8, 0.8, 0.8)) => {
+        page.drawLine({ start: { x: x1, y: y1 }, end: { x: x2, y: y2 }, thickness: 1, color });
+      };
+
+      const drawSection = (title, y) => {
+        // Section background
+        page.drawRectangle({
+          x: margin,
+          y: y - 25,
+          width: contentWidth,
+          height: 25,
+          color: rgb(0.95, 0.95, 0.95),
+          borderColor: rgb(0.8, 0.8, 0.8),
+          borderWidth: 1,
+        });
+        
+        // Section title
+        drawText(title, margin + 10, y - 15, 14, true, rgb(0.2, 0.2, 0.2));
+        return y - 40;
+      };
+
+      // Header with single-line title
+      page.drawRectangle({
+        x: margin,
+        y: cursorY - 40,
+        width: contentWidth,
+        height: 40,
+        color: rgb(0.1, 0.2, 0.5),
+      });
+      
+      const headerText = 'POGS — Patna Obstetrics & Gynaecological Society — Membership Application';
+      drawText(headerText, margin + 15, cursorY - 27, 12, true, rgb(1, 1, 1));
+      
+      cursorY -= 70;
+
+      // Application ID and Date
+      drawText(`Application ID: ${uid}`, width - margin - 150, cursorY, 10, true, rgb(0.4, 0.4, 0.4));
+      drawText(`Submitted: ${new Date().toLocaleDateString()}`, width - margin - 150, cursorY - 15, 10, false, rgb(0.4, 0.4, 0.4));
+      cursorY -= 40;
+
+      // Personal Information Section
+      cursorY = drawSection('Personal Information', cursorY);
+      
+      const personalDetails = [
+        ['Full Name', applicationData.name],
+        ['Date of Birth', new Date(applicationData.dateOfBirth).toLocaleDateString()],
+        ['Qualification', applicationData.qualification],
+        ['Membership Type', applicationData.membershipType],
+      ];
+
+      personalDetails.forEach(([label, value]) => {
+        drawText(`${label}:`, margin + 20, cursorY, 11, true);
+        drawText(String(value || ''), margin + 200, cursorY, 11, false);
+        cursorY -= 18;
+      });
+
+      cursorY -= 20;
+
+      // Contact Information Section
+      cursorY = drawSection('Contact Information', cursorY);
+      
+      const contactDetails = [
+        ['Email Address', applicationData.email],
+        ['Mobile Number', applicationData.mobile],
+      ];
+
+      contactDetails.forEach(([label, value]) => {
+        drawText(`${label}:`, margin + 20, cursorY, 11, true);
+        drawText(String(value || ''), margin + 200, cursorY, 11, false);
+        cursorY -= 18;
+      });
+
+      cursorY -= 20;
+
+      // Address Information Section
+      cursorY = drawSection('Address Information', cursorY);
+      
+      const addressDetails = [
+        ['Complete Address', applicationData.address],
+        ['District', applicationData.district],
+        ['State', applicationData.state],
+        ['PIN Code', applicationData.pinCode],
+      ];
+
+      addressDetails.forEach(([label, value]) => {
+        drawText(`${label}:`, margin + 20, cursorY, 11, true);
+        // Handle long addresses with line wrapping
+        const text = String(value || '');
+        if (text.length > 50) {
+          const lines = text.match(/.{1,50}/g) || [text];
+          lines.forEach((line, index) => {
+            drawText(line, margin + 200, cursorY - (index * 12), 11, false);
+          });
+          cursorY -= (lines.length - 1) * 12;
+        } else {
+          drawText(text, margin + 200, cursorY, 11, false);
+        }
+        cursorY -= 18;
+      });
+
+      cursorY -= 20;
+
+      // Payment Information Section
+      cursorY = drawSection('Payment Information', cursorY);
+      
+      const paymentDetails = [
+        ['UTR / Transaction ID', applicationData.paymentTransactionId || 'Not provided'],
+        ['Payment Status', 'Screenshot uploaded'],
+      ];
+
+      paymentDetails.forEach(([label, value]) => {
+        drawText(`${label}:`, margin + 20, cursorY, 11, true);
+        drawText(String(value || ''), margin + 200, cursorY, 11, false);
+        cursorY -= 18;
+      });
+
+      cursorY -= 30;
+
+      // Signature Section
+      if (signatureFile && signatureFile.buffer) {
+        try {
+          let embeddedImage;
+          if (signatureFile.mimetype === 'image/png') {
+            embeddedImage = await pdfDoc.embedPng(signatureFile.buffer);
+          } else {
+            embeddedImage = await pdfDoc.embedJpg(signatureFile.buffer);
+          }
+          
+          // Signature section background
+          page.drawRectangle({
+            x: margin,
+            y: cursorY - 110,
+            width: contentWidth,
+            height: 110,
+            color: rgb(0.98, 0.98, 0.98),
+            borderColor: rgb(0.8, 0.8, 0.8),
+            borderWidth: 1,
+          });
+          
+          drawText('Applicant Signature', margin + 20, cursorY - 25, 12, true, rgb(0.2, 0.2, 0.2));
+          
+          const imgWidth = 180;
+          const scale = imgWidth / embeddedImage.width;
+          const imgHeight = embeddedImage.height * scale;
+          
+          // Place signature on the right side of the box, vertically centered
+          const boxTopY = cursorY - 110;
+          const boxInnerY = boxTopY + (110 - imgHeight) / 2;
+          const imgX = margin + contentWidth - imgWidth - 20;
+          const imgY = boxInnerY + 10;
+          
+          page.drawImage(embeddedImage, { 
+            x: imgX, 
+            y: imgY, 
+            width: imgWidth, 
+            height: imgHeight 
+          });
+          
+          // Add a sign line on the left for clarity
+          drawText('Signed by:', margin + 20, boxTopY + 30, 11, false, rgb(0.3, 0.3, 0.3));
+          
+          cursorY = boxTopY - 20;
+        } catch (e) {
+          console.warn('Failed to embed signature into PDF:', e.message);
+        }
+      }
+
+      // Footer
+      cursorY = Math.max(cursorY - 50, 50);
+      drawLine(margin, cursorY, width - margin, cursorY, rgb(0.8, 0.8, 0.8));
+      drawText('This is a computer-generated application form.', margin, cursorY - 15, 9, false, rgb(0.5, 0.5, 0.5));
+      drawText('POGS - Patna Obstetrics & Gynaecological Society', width - margin - 200, cursorY - 15, 9, false, rgb(0.5, 0.5, 0.5));
+
+      const pdfBytes = await pdfDoc.save();
+      const pdfFileName = `membership-application-${uid}.pdf`;
+      const pdfUpload = await googleDriveService.uploadFile(Buffer.from(pdfBytes), pdfFileName, 'application/pdf', 'application');
+      application.applicationPdf = pdfUpload.id;
+      console.log('Application PDF uploaded to Google Drive:', pdfUpload.id);
+    } catch (pdfError) {
+      console.error('Failed to generate/upload application PDF:', pdfError.message);
+      // Proceed without PDF if generation fails
+    }
+
     await application.save();
     
     res.status(201).json({ 
       message: 'Application submitted successfully',
-      applicationId: application._id
+      applicationId: application._id,
+      applicationIdentifier: uid
     });
   } catch (error) {
     console.error('Error submitting application:', error);

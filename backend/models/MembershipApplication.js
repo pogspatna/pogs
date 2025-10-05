@@ -55,6 +55,21 @@ const membershipApplicationSchema = new mongoose.Schema({
     type: String, // Google Drive file ID
     required: true
   },
+  signature: {
+    type: String, // Google Drive file ID for applicant signature image
+    required: true
+  },
+  applicationIdentifier: {
+    type: String, // Unique identifier used in uploaded filenames for traceability
+    required: true,
+    index: true
+  },
+  paymentTransactionId: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true
+  },
   applicationPdf: {
     type: String, // Google Drive file ID
     required: false

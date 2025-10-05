@@ -8,12 +8,13 @@ interface Event {
   _id: string;
   name: string;
   shortDescription: string;
-  detailedDescription: string;
+  detailedDescription?: string;
   date: string;
   location: string;
   status: 'Upcoming' | 'Ongoing' | 'Past';
   createdAt: string;
   updatedAt: string;
+  image?: string;
 }
 
 export default function EventsPage() {
@@ -26,11 +27,11 @@ export default function EventsPage() {
   const [formData, setFormData] = useState({
     name: '',
     shortDescription: '',
-    detailedDescription: '',
     date: '',
     location: '',
     status: 'Upcoming' as Event['status']
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -51,10 +52,14 @@ export default function EventsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const payload = new FormData();
+      Object.entries(formData).forEach(([k, v]) => payload.append(k, v as string));
+      if (imageFile) payload.append('image', imageFile);
+
       if (editingEvent) {
-        await apiService.updateEvent(editingEvent._id, formData);
+        await apiService.updateEventFormData(editingEvent._id, payload);
       } else {
-        await apiService.createEvent(formData);
+        await apiService.createEventFormData(payload);
       }
       await fetchEvents();
       resetForm();
@@ -78,11 +83,11 @@ export default function EventsPage() {
     setFormData({
       name: '',
       shortDescription: '',
-      detailedDescription: '',
       date: '',
       location: '',
       status: 'Upcoming'
     });
+    setImageFile(null);
     setEditingEvent(null);
     setShowAddModal(false);
   };
@@ -92,11 +97,11 @@ export default function EventsPage() {
     setFormData({
       name: event.name,
       shortDescription: event.shortDescription,
-      detailedDescription: event.detailedDescription,
       date: event.date.split('T')[0], // Format for date input
       location: event.location,
       status: event.status
     });
+    setImageFile(null);
     setShowAddModal(true);
   };
 
@@ -258,16 +263,7 @@ export default function EventsPage() {
                     required
                   />
                 </div>
-                <div className="admin-form-group">
-                  <label className="admin-form-label">Detailed Description</label>
-                  <textarea
-                    value={formData.detailedDescription}
-                    onChange={(e) => setFormData({ ...formData, detailedDescription: e.target.value })}
-                    className="admin-form-textarea"
-                    rows={5}
-                    required
-                  />
-                </div>
+                {/* Detailed description removed per requirement */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="admin-form-group">
                     <label className="admin-form-label">Date</label>
@@ -301,6 +297,18 @@ export default function EventsPage() {
                     className="admin-form-input"
                     required
                   />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Event Image (optional)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                    className="admin-form-input"
+                  />
+                  {imageFile && (
+                    <p className="text-sm text-gray-600 mt-2">Selected: {imageFile.name}</p>
+                  )}
                 </div>
                 <div className="flex justify-end space-x-3 pt-4">
                   <button

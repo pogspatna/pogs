@@ -84,9 +84,9 @@ const OfficeBearersPage = () => {
   const getAllPastBearers = () => {
     return pastBearers
       .sort((a, b) => {
-        // First sort by year (descending), then by order (ascending)
+        // First sort by year (ascending), then by order (ascending)
         if (a.year !== b.year) {
-          return b.year - a.year;
+          return a.year - b.year;
         }
         return a.order - b.order;
       });

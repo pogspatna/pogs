@@ -8,7 +8,6 @@ import {
   Edit, 
   Trash2, 
   AlertCircle,
-  CheckCircle,
   X,
   Save,
   User,
@@ -627,7 +626,7 @@ export default function CommitteesPage() {
             </div>
             
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete the committee "{deletingCommittee.name}"? This action cannot be undone.
+              Are you sure you want to delete the committee &quot;{deletingCommittee.name}&quot;? This action cannot be undone.
             </p>
             
             <div className="flex justify-end space-x-3">

@@ -131,7 +131,7 @@ const CommitteesPage = () => {
               POGS Committees
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto">
-              Explore the various committees that drive our organization's mission and activities
+              Explore the various committees that drive our organization&apos;s mission and activities
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@ const CommitteesPage = () => {
                 <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm font-medium max-w-full">
                   <Search className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
                   <span className="truncate">
-                    Showing {filteredCommittees.length} committee{filteredCommittees.length !== 1 ? 's' : ''} matching "{searchTerm}"
+                    Showing {filteredCommittees.length} committee{filteredCommittees.length !== 1 ? 's' : ''} matching &quot;{searchTerm}&quot;
                   </span>
                 </div>
               </div>

@@ -13,7 +13,7 @@ export default function AboutPage() {
               About POGS
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              Patna Obstetrics & Gynaecological Society
+              Patna Obstetric & Gynaecological Society
             </p>
             <p className="text-lg text-blue-50 max-w-3xl mx-auto">
               Dedicated to advancing excellence in women&apos;s healthcare through professional development, 
@@ -149,7 +149,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  Bihar Obstetric and Gynaecological Society [Now Patna Obstetric and Gynaecological Society] was founded in the year 1958 in the department of Obstetrics and Gynaecology of Patna Medical College Hospital in the library cum seminar room attached to Gynaecology outpatient department (GOPD).
+                  Bihar Obstetric and Gynaecological Society [Now Patna Obstetric and Gynaecological Society] was founded in the year 1958 in the department of Obstetric and Gynaecology of Patna Medical College Hospital in the library cum seminar room attached to Gynaecology outpatient department (GOPD).
                 </p>
               </div>
 
@@ -165,7 +165,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  From 1958 to early 1984, the office of P.O.G.S. was functioning in the department of Obstetrics and Gynaecology, P.M.C.H. in the library cum seminar room attached to GOPD. In the year 1984, under the Presidentship of Dr. Anmola Sinha, the office was shifted to a room in the Indian Medical Association building which is centrally located and has a bigger accommodation for holding meetings.
+                  From 1958 to early 1984, the office of P.O.G.S. was functioning in the department of Obstetric and Gynaecology, P.M.C.H. in the library cum seminar room attached to GOPD. In the year 1984, under the Presidentship of Dr. Anmola Sinha, the office was shifted to a room in the Indian Medical Association building which is centrally located and has a bigger accommodation for holding meetings.
                 </p>
               </div>
 

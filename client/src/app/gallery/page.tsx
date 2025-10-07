@@ -90,7 +90,7 @@ export default function GalleryPage() {
             <ImageIcon className="w-16 h-16 mx-auto mb-4" />
             <h1 className="text-4xl font-bold mb-4">POGS Gallery</h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Explore our collection of memorable moments, events, and achievements from the Patna Obstetrics & Gynaecological Society
+              Explore our collection of memorable moments, events, and achievements from the Patna Obstetric & Gynaecological Society
             </p>
           </div>
         </div>

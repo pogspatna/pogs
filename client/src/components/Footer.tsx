@@ -31,7 +31,7 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold">POGS</h3>
-                <p className="text-gray-300 text-sm">Patna Obstetrics & Gynaecological Society</p>
+                <p className="text-gray-300 text-sm">Patna Obstetric & Gynaecological Society</p>
               </div>
             </div>
             <p className="text-gray-300 text-body leading-relaxed mb-6">
@@ -147,7 +147,7 @@ const Footer = () => {
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {currentYear} Patna Obstetrics &amp; Gynaecological Society. All rights reserved.
+              © {currentYear} Patna Obstetric &amp; Gynaecological Society. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link 

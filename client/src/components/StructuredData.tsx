@@ -17,9 +17,9 @@ const StructuredData = ({ type = 'organization', data }: StructuredDataProps) =>
         return {
           ...baseData,
           '@type': 'MedicalOrganization',
-          name: 'Patna Obstetrics & Gynaecological Society',
+          name: 'Patna Obstetric & Gynaecological Society',
           alternateName: 'POGS',
-          description: 'Official website of Patna Obstetrics & Gynaecological Society. Connecting medical professionals and advancing obstetrics and gynaecology in Bihar, India.',
+          description: 'Official website of Patna Obstetric & Gynaecological Society. Connecting medical professionals and advancing obstetric and gynaecology in Bihar, India.',
           url: 'https://pogspatna.org',
           logo: 'https://pogspatna.org/icon.png',
           image: 'https://pogspatna.org/web-app-manifest-512x512.png',
@@ -44,7 +44,7 @@ const StructuredData = ({ type = 'organization', data }: StructuredDataProps) =>
             name: 'Federation of Obstetric and Gynaecological Societies of India',
             alternateName: 'FOGSI'
           },
-          medicalSpecialty: ['Obstetrics', 'Gynaecology'],
+          medicalSpecialty: ['Obstetric', 'Gynaecology'],
           areaServed: {
             '@type': 'State',
             name: 'Bihar'
@@ -58,14 +58,14 @@ const StructuredData = ({ type = 'organization', data }: StructuredDataProps) =>
         return {
           ...baseData,
           '@type': 'WebSite',
-          name: 'POGS - Patna Obstetrics & Gynaecological Society',
+          name: 'POGS - Patna Obstetric & Gynaecological Society',
           alternateName: 'POGS Patna',
           url: 'https://pogspatna.org',
-          description: 'Official website of Patna Obstetrics & Gynaecological Society',
+          description: 'Official website of Patna Obstetric & Gynaecological Society',
           inLanguage: 'en-US',
           isPartOf: {
             '@type': 'Organization',
-            name: 'Patna Obstetrics & Gynaecological Society'
+            name: 'Patna Obstetric & Gynaecological Society'
           },
           about: {
             '@type': 'MedicalOrganization',
@@ -85,7 +85,7 @@ const StructuredData = ({ type = 'organization', data }: StructuredDataProps) =>
           ...data,
           organizer: {
             '@type': 'MedicalOrganization',
-            name: 'Patna Obstetrics & Gynaecological Society',
+            name: 'Patna Obstetric & Gynaecological Society',
             url: 'https://pogspatna.org'
           }
         };
@@ -97,7 +97,7 @@ const StructuredData = ({ type = 'organization', data }: StructuredDataProps) =>
           ...data,
           memberOf: {
             '@type': 'MedicalOrganization',
-            name: 'Patna Obstetrics & Gynaecological Society'
+            name: 'Patna Obstetric & Gynaecological Society'
           }
         };
 

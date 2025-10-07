@@ -162,7 +162,7 @@ const MembershipPage = () => {
   };
 
   const paymentDetails = {
-    accountHolder: "Patna Obstetrics & Gynaecological Society",
+    accountHolder: "Patna Obstetric & Gynaecological Society",
     accountNumber: "1234567890123456",
     ifscCode: "SBIN0012345",
     bankName: "State Bank of India",

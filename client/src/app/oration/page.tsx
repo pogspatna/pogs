@@ -13,9 +13,9 @@ export default function OrationPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Oration
             </h1>
-            <p className="text-xl text-blue-100 mb-8">
-              Patna Obstetrics & Gynaecological Society
-            </p>
+                <p className="text-xl text-blue-100 mb-8">
+                  Patna Obstetric & Gynaecological Society
+                </p>
             <p className="text-lg text-blue-50 max-w-3xl mx-auto">
               Honoring excellence in women&apos;s healthcare through distinguished orations and recognition of outstanding contributions to the field of obstetrics and gynaecology.
             </p>
@@ -42,7 +42,7 @@ export default function OrationPage() {
 
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">
-                  The Patna Obstetrics & Gynaecological Society (POGS) is proud to present our distinguished 
+                  The Patna Obstetric & Gynaecological Society (POGS) is proud to present our distinguished 
                   Oration Program, a prestigious platform that recognizes and honors exceptional contributions 
                   to the field of obstetrics and gynaecology. This program serves as a cornerstone of our 
                   commitment to advancing women&apos;s healthcare through knowledge sharing, innovation, and 

@@ -344,12 +344,12 @@ export default function HomePage() {
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                     <div className="relative">
                       <div className="w-full h-48 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                        <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
                           <Image 
                             src="/president.png" 
                             alt="POGS President" 
-                            width={128}
-                            height={128}
+                            width={160}
+                            height={160}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -364,6 +364,7 @@ export default function HomePage() {
                       <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
                         President
                       </h3>
+                      <p className="text-md font-semibold text-gray-700">Dr. Pragya Mishra Choudhary</p>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       Leading POGS with vision and dedication to advance women&apos;s healthcare in Bihar.
                     </p>
@@ -380,12 +381,12 @@ export default function HomePage() {
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                     <div className="relative">
                       <div className="w-full h-48 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                        <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
                           <Image 
                             src="/secretary.png" 
                             alt="POGS Secretary" 
-                            width={128}
-                            height={128}
+                            width={160}
+                            height={160}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -400,6 +401,7 @@ export default function HomePage() {
                       <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">
                         Secretary
                       </h3>
+                      <p className="text-md font-semibold text-gray-700">Dr. Nibha Mohan</p>
                       <p className="text-gray-600 text-sm leading-relaxed">
                         Managing POGS operations and ensuring smooth coordination of all activities.
                       </p>

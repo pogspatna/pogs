@@ -123,7 +123,7 @@ const EventsPage = () => {
         </div>
         <div className="modal-body p-0">
           <Image
-            src={event.image ? `https://drive.google.com/thumbnail?id=${event.image}&sz=w1920-h1080` : '/favicon.svg'}
+            src={event.image ? `/api/image?id=${event.image}&w=1920&h=1080&variant=thumb` : '/favicon.svg'}
             alt={`${event.name} image`}
             width={800}
             height={600}
@@ -132,7 +132,7 @@ const EventsPage = () => {
             onError={(e) => {
               // Fallback to direct view URL if thumbnail fails
               if (event.image) {
-                e.currentTarget.src = `https://drive.google.com/uc?export=view&id=${event.image}`;
+                e.currentTarget.src = `/api/image?id=${event.image}&variant=view`;
               }
             }}
           />

@@ -40,7 +40,7 @@ export default function GalleryPage() {
     setToast(prev => ({ ...prev, isVisible: false }));
   };
 
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiService.getGalleryImages();
@@ -52,7 +52,7 @@ export default function GalleryPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchImages();

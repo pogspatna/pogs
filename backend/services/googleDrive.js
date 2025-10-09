@@ -16,6 +16,7 @@ class GoogleDriveService {
       paymentScreenshots: process.env.GOOGLE_DRIVE_PAYMENT_SCREENSHOTS_FOLDER_ID,
       gallery: process.env.GOOGLE_DRIVE_GALLERY_FOLDER_ID,
       events: process.env.GOOGLE_DRIVE_EVENTS_FOLDER_ID,
+      notices: process.env.GOOGLE_DRIVE_NOTICES_FOLDER_ID,
       root: process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID || process.env.GOOGLE_DRIVE_FOLDER_ID
     };
   }
@@ -30,11 +31,11 @@ class GoogleDriveService {
         return false;
       }
 
-      // Create OAuth2 client
+      // Create OAuth2 client (allow override of redirect URI; default to OAuth Playground)
       this.auth = new google.auth.OAuth2(
         process.env.GOOGLE_DRIVE_CLIENT_ID,
         process.env.GOOGLE_DRIVE_CLIENT_SECRET,
-        'urn:ietf:wg:oauth:2.0:oob'
+        process.env.GOOGLE_DRIVE_REDIRECT_URI || 'https://developers.google.com/oauthplayground'
       );
 
       // Set refresh token
@@ -87,6 +88,9 @@ class GoogleDriveService {
           break;
         case 'event':
           targetFolderId = this.folderIds.events || this.folderIds.root;
+          break;
+        case 'notice':
+          targetFolderId = this.folderIds.notices || this.folderIds.root;
           break;
         default:
           targetFolderId = this.folderIds.root;

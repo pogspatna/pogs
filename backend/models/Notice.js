@@ -14,6 +14,22 @@ const noticeSchema = new mongoose.Schema({
   expiryDate: {
     type: Date,
     required: true
+  },
+  pdfFileId: {
+    type: String,
+    default: null
+  },
+  pdfName: {
+    type: String,
+    default: null
+  },
+  pdfViewUrl: {
+    type: String,
+    default: null
+  },
+  pdfDownloadUrl: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true

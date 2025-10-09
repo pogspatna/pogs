@@ -1,9 +1,28 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Users, Calendar, UserCheck, Award, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe } from 'lucide-react';
 import EventsCarousel from '@/components/EventsCarousel';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+
+function PdfModal({ fileId, title, onClose }: { fileId: string; title: string; onClose: () => void }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content max-w-4xl w-full">
+        <div className="modal-header flex justify-between items-center">
+          <h3 className="font-semibold text-gray-900 truncate pr-4">{title}</h3>
+          <button onClick={onClose} className="btn-ghost btn-sm !p-2">✕</button>
+        </div>
+        <div className="modal-body p-0">
+          <iframe
+            src={`/api/image?id=${fileId}&variant=pdf`}
+            className="w-full h-[75vh]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface Notice {
   _id: string;
@@ -11,10 +30,13 @@ interface Notice {
   content: string;
   expiryDate: string;
   createdAt: string;
+  pdfViewUrl?: string | null;
+  pdfDownloadUrl?: string | null;
 }
 
 export default function HomePage() {
   const [notices, setNotices] = useState<Notice[]>([]);
+  const [openPdf, setOpenPdf] = useState<{ id: string; title: string } | null>(null);
 
   useEffect(() => {
     const loadNotices = async () => {
@@ -273,7 +295,16 @@ export default function HomePage() {
                                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                                     <span>Valid till {new Date(notice.expiryDate).toLocaleDateString()}</span>
                                   </div>
-                                  <div className="w-2 h-2 bg-blue-400 rounded-full opacity-60"></div>
+                                  <div>
+                                    {notice.pdfViewUrl && (
+                                      <button
+                                        onClick={() => setOpenPdf({ id: new URL(notice.pdfViewUrl as string).searchParams.get('id') || '', title: notice.title })}
+                                        className="inline-flex items-center text-xs font-semibold text-blue-700 hover:text-blue-800 hover:underline"
+                                      >
+                                        View Details
+                                      </button>
+                                    )}
+                                  </div>
                 </div>
               </div>
             </div>
@@ -439,33 +470,17 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Enhanced Trust Indicators */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/20">
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20 group-hover:scale-110 transition-transform">
-                  <Users className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-white mb-2">950+</div>
-                <div className="text-blue-200 font-medium">Active Members</div>
-              </div>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20 group-hover:scale-110 transition-transform">
-                  <Award className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-white mb-2">65+</div>
-                <div className="text-blue-200 font-medium">Years of Excellence</div>
-              </div>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20 group-hover:scale-110 transition-transform">
-                  <Calendar className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-white mb-2">100+</div>
-                <div className="text-blue-200 font-medium">Annual Events</div>
-              </div>
-            </div>
+            {/* Numbers section removed as requested */}
           </div>
         </div>
       </section>
+      {openPdf && (
+        <PdfModal
+          fileId={openPdf.id}
+          title={openPdf.title}
+          onClose={() => setOpenPdf(null)}
+        />
+      )}
     </div>
   );
 }

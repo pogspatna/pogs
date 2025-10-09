@@ -110,6 +110,10 @@ export interface Notice {
   title: string;
   content: string;
   expiryDate: string; // ISO date string
+  pdfFileId?: string | null;
+  pdfName?: string | null;
+  pdfViewUrl?: string | null;
+  pdfDownloadUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -387,6 +391,26 @@ export const noticesAPI = {
     apiRequest<{ message: string }>(`/notices/${id}`, {
       method: 'DELETE',
     }),
+  createFormData: async (formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/notices`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new APIError(response.status, `HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  },
+  updateFormData: async (id: string, formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/notices/${id}`, {
+      method: 'PUT',
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new APIError(response.status, `HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  },
 };
 
 // Unified API Service
@@ -532,6 +556,8 @@ export const apiService = {
   getAllNotices: noticesAPI.getAll,
   createNotice: noticesAPI.create,
   updateNotice: noticesAPI.update,
+  createNoticeFormData: noticesAPI.createFormData,
+  updateNoticeFormData: noticesAPI.updateFormData,
   deleteNotice: noticesAPI.delete,
 };
 

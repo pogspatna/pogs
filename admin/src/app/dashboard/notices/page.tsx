@@ -9,6 +9,9 @@ interface Notice {
   title: string;
   content: string;
   expiryDate: string;
+  pdfViewUrl?: string | null;
+  pdfDownloadUrl?: string | null;
+  pdfName?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,6 +22,7 @@ export default function NoticesPage() {
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Notice | null>(null);
   const [form, setForm] = useState({ title: '', content: '', expiryDate: '' });
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
 
   const load = async () => {
     try {
@@ -37,12 +41,14 @@ export default function NoticesPage() {
   const openCreate = () => {
     setEditing(null);
     setForm({ title: '', content: '', expiryDate: '' });
+    setPdfFile(null);
     setShowModal(true);
   };
 
   const openEdit = (n: Notice) => {
     setEditing(n);
     setForm({ title: n.title, content: n.content, expiryDate: n.expiryDate.split('T')[0] });
+    setPdfFile(null);
     setShowModal(true);
   };
 
@@ -50,9 +56,27 @@ export default function NoticesPage() {
     e.preventDefault();
     try {
       if (editing) {
-        await apiService.updateNotice(editing._id, form);
+        if (pdfFile) {
+          const fd = new FormData();
+          fd.append('title', form.title);
+          fd.append('content', form.content);
+          fd.append('expiryDate', form.expiryDate);
+          fd.append('pdf', pdfFile);
+          await apiService.updateNoticeFormData(editing._id, fd);
+        } else {
+          await apiService.updateNotice(editing._id, form);
+        }
       } else {
-        await apiService.createNotice(form);
+        if (pdfFile) {
+          const fd = new FormData();
+          fd.append('title', form.title);
+          fd.append('content', form.content);
+          fd.append('expiryDate', form.expiryDate);
+          fd.append('pdf', pdfFile);
+          await apiService.createNoticeFormData(fd);
+        } else {
+          await apiService.createNotice(form);
+        }
       }
       setShowModal(false);
       await load();
@@ -168,6 +192,26 @@ export default function NoticesPage() {
                     onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
                     required
                   />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Attach PDF (optional)</label>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    className="admin-form-input"
+                    onChange={(e) => setPdfFile(e.target.files && e.target.files[0] ? e.target.files[0] : null)}
+                  />
+                  {editing && (editing.pdfViewUrl || editing.pdfDownloadUrl) && (
+                    <p className="text-sm text-gray-600 mt-2">
+                      Existing: {editing.pdfName || 'PDF'} —
+                      {editing.pdfViewUrl && (
+                        <a href={editing.pdfViewUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">View</a>
+                      )}
+                      {editing.pdfDownloadUrl && (
+                        <a href={editing.pdfDownloadUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-2">Download</a>
+                      )}
+                    </p>
+                  )}
                 </div>
                 <div className="flex justify-end space-x-3 pt-2">
                   <button type="button" className="btn-admin-secondary" onClick={() => setShowModal(false)}>Cancel</button>

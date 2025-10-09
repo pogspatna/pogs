@@ -15,7 +15,7 @@ const Navbar = () => {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About Us' },
     { href: '/office-bearers', label: 'Office Bearers' },
-    { href: '/committees', label: 'POGS Committee' },
+    { href: '/committees', label: 'Committees' },
     { href: '/members', label: 'Members' },
     { href: '/events', label: 'Events' },
     { href: '/oration', label: 'Oration' },
@@ -60,7 +60,7 @@ const Navbar = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 whitespace-nowrap ${
                   isActive(item.href)
                     ? 'bg-blue-100 text-blue-700 shadow-sm'
                     : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50'
@@ -90,7 +90,7 @@ const Navbar = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-5 py-3.5 rounded-lg font-semibold transition-all duration-200 ${
+                  className={`block px-5 py-3.5 rounded-lg font-semibold transition-all duration-200 whitespace-nowrap ${
                     isActive(item.href)
                       ? 'bg-blue-100 text-blue-700 shadow-sm border-l-4 border-blue-500'
                       : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50'

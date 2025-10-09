@@ -15,7 +15,7 @@ function PdfModal({ fileId, title, onClose }: { fileId: string; title: string; o
         </div>
         <div className="modal-body p-0">
           <iframe
-            src={`/api/image?id=${fileId}&variant=pdf`}
+            src={`https://drive.google.com/file/d/${fileId}/preview`}
             className="w-full h-[75vh]"
           />
         </div>

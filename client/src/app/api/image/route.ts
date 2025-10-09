@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const id = searchParams.get('id') || '';
     const w = searchParams.get('w') || '1920';
     const h = searchParams.get('h') || '1080';
-    const variant = searchParams.get('variant') || 'thumb'; // 'thumb' | 'view' | 'pdf'
+    const variant = searchParams.get('variant') || 'thumb'; // 'thumb' | 'view'
 
     if (!id || !isValidId(id)) {
       return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
@@ -19,8 +19,6 @@ export async function GET(request: Request) {
     let targetUrl: string;
     if (variant === 'view') {
       targetUrl = `https://drive.google.com/uc?export=view&id=${id}`;
-    } else if (variant === 'pdf') {
-      targetUrl = `https://drive.google.com/uc?export=download&id=${id}`;
     } else {
       targetUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w${w}-h${h}`;
     }
@@ -38,7 +36,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Upstream fetch failed' }, { status: upstream.status });
     }
 
-    const contentType = upstream.headers.get('content-type') || (variant === 'pdf' ? 'application/pdf' : 'image/jpeg');
+    const contentType = upstream.headers.get('content-type') || 'image/jpeg';
     const buffer = await upstream.arrayBuffer();
     const res = new NextResponse(Buffer.from(buffer), {
       status: 200,
@@ -52,5 +50,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Proxy error' }, { status: 500 });
   }
 }
-
-

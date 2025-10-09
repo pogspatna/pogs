@@ -43,7 +43,7 @@ const Navbar = () => {
                 alt="POGS Logo"
                 width={48}
                 height={48}
-                className="w-full h-full object-contain"
+                className="object-contain"
                 priority
               />
             </div>

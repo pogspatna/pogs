@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Users, Calendar, UserCheck, Award, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe } from 'lucide-react';
+import { Calendar, UserCheck, ArrowRight, Stethoscope, Heart, Shield, Star, CheckCircle, Globe } from 'lucide-react';
 import EventsCarousel from '@/components/EventsCarousel';
 import { useEffect, useState } from 'react';
 

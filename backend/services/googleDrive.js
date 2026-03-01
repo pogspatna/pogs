@@ -1,12 +1,11 @@
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
 
 class GoogleDriveService {
   constructor() {
     this.drive = null;
     this.auth = null;
     this.initialized = false;
+    this.authMode = null;
     
     // Folder mapping for organized storage
     this.folderIds = {
@@ -21,37 +20,121 @@ class GoogleDriveService {
     };
   }
 
+  getEnv(name) {
+    const value = process.env[name];
+    return typeof value === 'string' ? value.trim() : '';
+  }
+
+  hasServiceAccountCredentials() {
+    return Boolean(this.getEnv('GOOGLE_DRIVE_CLIENT_EMAIL') && this.getEnv('GOOGLE_DRIVE_PRIVATE_KEY'));
+  }
+
+  hasOAuthCredentials() {
+    return Boolean(
+      this.getEnv('GOOGLE_DRIVE_CLIENT_ID') &&
+      this.getEnv('GOOGLE_DRIVE_CLIENT_SECRET') &&
+      this.getEnv('GOOGLE_DRIVE_REFRESH_TOKEN')
+    );
+  }
+
+  async initializeWithServiceAccount() {
+    const clientEmail = this.getEnv('GOOGLE_DRIVE_CLIENT_EMAIL');
+    const privateKey = this.getEnv('GOOGLE_DRIVE_PRIVATE_KEY').replace(/\\n/g, '\n');
+
+    if (!clientEmail || !privateKey) {
+      throw new Error('Missing service account credentials');
+    }
+
+    this.auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: clientEmail,
+        private_key: privateKey
+      },
+      scopes: ['https://www.googleapis.com/auth/drive']
+    });
+
+    this.drive = google.drive({ version: 'v3', auth: this.auth });
+    await this.drive.about.get({ fields: 'user' });
+    this.authMode = 'service_account';
+  }
+
+  async initializeWithOAuth() {
+    const clientId = this.getEnv('GOOGLE_DRIVE_CLIENT_ID');
+    const clientSecret = this.getEnv('GOOGLE_DRIVE_CLIENT_SECRET');
+    const refreshToken = this.getEnv('GOOGLE_DRIVE_REFRESH_TOKEN').replace(/\s/g, '');
+    const redirectUri = this.getEnv('GOOGLE_DRIVE_REDIRECT_URI') || 'https://developers.google.com/oauthplayground';
+
+    if (!clientId || !clientSecret || !refreshToken) {
+      throw new Error('Missing OAuth credentials');
+    }
+
+    this.auth = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+    this.auth.setCredentials({
+      refresh_token: refreshToken
+    });
+
+    this.drive = google.drive({ version: 'v3', auth: this.auth });
+    await this.drive.about.get({ fields: 'user' });
+    this.authMode = 'oauth';
+  }
+
   async initialize() {
+    if (this.initialized) {
+      return true;
+    }
+
     try {
-      // Check if OAuth credentials are provided
-      if (!process.env.GOOGLE_DRIVE_CLIENT_ID || 
-          !process.env.GOOGLE_DRIVE_CLIENT_SECRET || 
-          !process.env.GOOGLE_DRIVE_REFRESH_TOKEN) {
-        console.error('Google Drive: Missing OAuth credentials. Please set GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, and GOOGLE_DRIVE_REFRESH_TOKEN');
-        return false;
+      const type = this.getEnv('GOOGLE_DRIVE_TYPE').toLowerCase();
+      const hasServiceAccount = this.hasServiceAccountCredentials();
+      const hasOAuth = this.hasOAuthCredentials();
+
+      const strategyOrder = [];
+      if (type === 'service_account') {
+        strategyOrder.push('service_account', 'oauth');
+      } else if (type === 'oauth') {
+        strategyOrder.push('oauth', 'service_account');
+      } else if (hasServiceAccount) {
+        strategyOrder.push('service_account', 'oauth');
+      } else {
+        strategyOrder.push('oauth', 'service_account');
       }
 
-      // Create OAuth2 client (allow override of redirect URI; default to OAuth Playground)
-      this.auth = new google.auth.OAuth2(
-        process.env.GOOGLE_DRIVE_CLIENT_ID,
-        process.env.GOOGLE_DRIVE_CLIENT_SECRET,
-        process.env.GOOGLE_DRIVE_REDIRECT_URI || 'https://developers.google.com/oauthplayground'
-      );
+      let lastError = null;
 
-      // Set refresh token
-      this.auth.setCredentials({
-        refresh_token: process.env.GOOGLE_DRIVE_REFRESH_TOKEN
-      });
+      for (const strategy of strategyOrder) {
+        try {
+          if (strategy === 'service_account') {
+            if (!hasServiceAccount) {
+              continue;
+            }
+            await this.initializeWithServiceAccount();
+          } else {
+            if (!hasOAuth) {
+              continue;
+            }
+            await this.initializeWithOAuth();
+          }
 
-      // Create Drive API instance
-      this.drive = google.drive({ version: 'v3', auth: this.auth });
+          this.initialized = true;
+          console.log(`Google Drive service initialized successfully with ${this.authMode}`);
+          return true;
+        } catch (error) {
+          lastError = error;
+          console.error(`Google Drive ${strategy} initialization failed:`, error.message);
+        }
+      }
 
-      // Test the connection
-      await this.drive.about.get({ fields: 'user' });
-      
-      this.initialized = true;
-      console.log('Google Drive service initialized successfully with OAuth');
-      return true;
+      if (!hasServiceAccount && !hasOAuth) {
+        console.error(
+          'Google Drive: Missing credentials. Configure service account (GOOGLE_DRIVE_CLIENT_EMAIL, GOOGLE_DRIVE_PRIVATE_KEY) or OAuth (GOOGLE_DRIVE_CLIENT_ID, GOOGLE_DRIVE_CLIENT_SECRET, GOOGLE_DRIVE_REFRESH_TOKEN).'
+        );
+      }
+
+      if (lastError && lastError.message === 'invalid_grant') {
+        console.error('Google Drive OAuth refresh token is invalid or expired. Rotate GOOGLE_DRIVE_REFRESH_TOKEN or switch GOOGLE_DRIVE_TYPE=service_account.');
+      }
+
+      return false;
     } catch (error) {
       console.error('Google Drive initialization failed:', error.message);
       return false;
@@ -216,6 +299,13 @@ class GoogleDriveService {
 
   async makeFilePublic(fileId) {
     try {
+      if (!this.initialized) {
+        const success = await this.initialize();
+        if (!success) {
+          return false;
+        }
+      }
+
       await this.drive.permissions.create({
         fileId: fileId,
         resource: {

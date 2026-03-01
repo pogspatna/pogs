@@ -150,7 +150,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       image: galleryImage
     });
   } catch (error) {
-    console.error('Error uploading gallery image:', error);
+    console.error('Error uploading gallery image:', error.message);
     res.status(500).json({ 
       error: 'Failed to upload image. Please check your file and try again.',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -201,7 +201,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       image: updatedImage
     });
   } catch (error) {
-    console.error('Error updating gallery image:', error);
+    console.error('Error updating gallery image:', error.message);
     res.status(400).json({ error: error.message });
   }
 });

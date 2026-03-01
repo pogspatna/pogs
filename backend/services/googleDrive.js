@@ -84,6 +84,25 @@ class GoogleDriveService {
     return combinedMessage.includes('service accounts do not have storage quota');
   }
 
+  isInvalidGrantError(error) {
+    const responseError = error?.response?.data?.error || '';
+    const responseDescription = error?.response?.data?.error_description || '';
+    const combinedMessage = `${error?.message || ''} ${responseError} ${responseDescription}`.toLowerCase();
+    return combinedMessage.includes('invalid_grant');
+  }
+
+  getUploadErrorMessage(error) {
+    if (this.isInvalidGrantError(error)) {
+      return 'OAuth refresh token is invalid or expired. Regenerate GOOGLE_DRIVE_REFRESH_TOKEN for the same OAuth client and redeploy.';
+    }
+
+    if (this.isServiceAccountQuotaError(error)) {
+      return 'Service account cannot upload to personal Drive folders. Use a Shared Drive folder or valid OAuth credentials.';
+    }
+
+    return error?.message || 'Unknown Google Drive upload error';
+  }
+
   async initialize() {
     if (this.initialized) {
       return true;
@@ -136,7 +155,7 @@ class GoogleDriveService {
         );
       }
 
-      if (lastError && lastError.message === 'invalid_grant') {
+      if (lastError && this.isInvalidGrantError(lastError)) {
         console.error('Google Drive OAuth refresh token is invalid or expired. Rotate GOOGLE_DRIVE_REFRESH_TOKEN or switch GOOGLE_DRIVE_TYPE=service_account.');
       }
 
@@ -237,13 +256,15 @@ class GoogleDriveService {
           this.initialized = true;
           return await this.uploadFile(fileBuffer, fileName, mimeType, fileType);
         } catch (oauthError) {
-          console.error('OAuth retry after service-account quota failure also failed:', oauthError.message);
-          throw oauthError;
+          const safeOAuthError = this.getUploadErrorMessage(oauthError);
+          console.error('OAuth retry after service-account quota failure also failed:', safeOAuthError);
+          throw new Error(`Failed to upload file: ${safeOAuthError}`);
         }
       }
 
-      console.error('Google Drive upload error:', error.message);
-      throw new Error(`Failed to upload file: ${error.message}`);
+      const safeError = this.getUploadErrorMessage(error);
+      console.error('Google Drive upload error:', safeError);
+      throw new Error(`Failed to upload file: ${safeError}`);
     }
   }
 

@@ -78,6 +78,12 @@ class GoogleDriveService {
     this.authMode = 'oauth';
   }
 
+  isServiceAccountQuotaError(error) {
+    const responseMessage = error?.response?.data?.error?.message || '';
+    const combinedMessage = `${error?.message || ''} ${responseMessage}`.toLowerCase();
+    return combinedMessage.includes('service accounts do not have storage quota');
+  }
+
   async initialize() {
     if (this.initialized) {
       return true;
@@ -220,6 +226,22 @@ class GoogleDriveService {
         webViewLink: response.data.webViewLink
       };
     } catch (error) {
+      const canRetryWithOAuth = this.authMode === 'service_account' &&
+        this.hasOAuthCredentials() &&
+        this.isServiceAccountQuotaError(error);
+
+      if (canRetryWithOAuth) {
+        console.warn('Service account upload hit storage quota limitation. Retrying with OAuth credentials.');
+        try {
+          await this.initializeWithOAuth();
+          this.initialized = true;
+          return await this.uploadFile(fileBuffer, fileName, mimeType, fileType);
+        } catch (oauthError) {
+          console.error('OAuth retry after service-account quota failure also failed:', oauthError.message);
+          throw oauthError;
+        }
+      }
+
       console.error('Google Drive upload error:', error.message);
       throw new Error(`Failed to upload file: ${error.message}`);
     }
